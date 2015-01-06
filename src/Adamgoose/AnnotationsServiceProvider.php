@@ -204,8 +204,9 @@ class AnnotationsServiceProvider extends ServiceProvider {
 
         $scanner = new RouteScanner($this->scanRoutes);
 
-        file_put_contents($this->finder->getScannedRoutesPath(),
-          '<?php ' . $scanner->getRouteDefinitions());
+        file_put_contents(
+          $this->finder->getScannedRoutesPath(), '<?php ' . $scanner->getRouteDefinitions()
+        );
     }
 
     /**
