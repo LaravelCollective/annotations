@@ -120,3 +120,61 @@ class MailHandler {
 }
 ```
 
+### Route Annotations
+
+#### @Get
+
+The `@Get` annotation registeres a route for an HTTP GET request.
+
+```php
+<?php namespace App\Http\Controllers;
+
+class HomeController {
+
+  /**
+   * Show the Index Page
+   * @Get("/")
+   */
+  public function getIndex()
+  {
+    return view('index');
+  }
+
+}
+```
+
+You can also set up route names.
+
+```php
+  /**
+   * @Get("/", as="index")
+   */
+```
+
+... or middlewares.
+
+```php
+  /**
+   * @Get("/", middleware="guest")
+   */
+```
+
+... or both.
+
+```php
+  /**
+   * @Get("/", as="index", middleware="guest")
+   */
+```
+
+Here's an example that uses all of the available parameters for a `@Get` annotation:
+
+```php
+  /**
+   * @Get("/profiles/{id}", as="profiles.show", middleware="guest", domain="foo.com", where={"id": "[0-9]+"})
+   */
+```
+
+#### @Post, @Options, @Put, @Patch, @Delete
+
+The `@Post`, `@Options`, `@Put`, `@Patch`, and `@Delete` annotations have the exact same syntax as the `@Get` annotation, except it will register a route for the respective HTTP verb, as opposed to the GET verb.
