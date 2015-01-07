@@ -22,7 +22,7 @@ Next, update Composer from the Terminal:
     
 Once composer is done, you'll need to create a Service Provider in `app/Providers/AnnotationsServiceProvider.php`.
 
-```
+```php
 <?php namespace App\Providers;
 
 use Adamgoose\AnnotationsServiceProvider as ServiceProvider;
