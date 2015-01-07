@@ -65,4 +65,58 @@ Finally, add your new provider to the `providers` array of `config/app.php`:
 
 ## Usage
 
-Coming soon...
+### Setting up Scanning
+
+Scanning your controllers for annotations can be configured by editing the `protected $scanEvents` and `protected $scanRoutes` in your `AnnotationsServiceProvider`. For example, if you wanted to scan `App\Handlers\Events\MailHandler` for event annotations, you would add it to `protected $scanEvents` like so:
+
+```php
+    /**
+     * The classes to scan for event annotations.
+     *
+     * @var array
+     */
+    protected $scanEvents = [
+      'App\Handlers\Events\MailHandler',
+    ];
+```
+
+Likewise, if you wanted to scan `App\Http\Controllers\HomeController` for route annotations, you would add it to `protected $scanRoutes` like so:
+
+```php
+    /**
+     * The classes to scan for route annotations.
+     *
+     * @var array
+     */
+    protected $scanRoutes = [
+      'App\Http\Controllers\HomeController',
+    ];
+```
+
+Scanning your event handlers and controllers can be done manully by using `php artisan event:scan` and `php artisan route:scan` respectively, or automatically by setting `protected $scanWhenLocal = true`.
+
+### Event Annotations
+
+#### @Hears
+
+The `@Hears` annotation registers an event listener for a particular event. Annotating any method with `@Hears("SomeEventName")` will register an event listener that will call that method when the `SomeEventName` event is fired.
+
+```php
+<?php namespace App\Handlers\Events;
+
+use App\User;
+
+class MailHandler {
+
+  /**
+   * Send welcome email to User
+   * @Hears("UserWasRegistered")
+   */
+  public function sendWelcomeEmail(User $user)
+  {
+    // send welcome email to $user
+  }
+
+}
+```
+
