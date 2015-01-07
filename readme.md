@@ -8,7 +8,7 @@
 
 During its early stages of development, Laravel 5.0 was gearing up to support Route and Event annotations. With much [contraversy](http://www.buzzsprout.com/11908/212256-episode-18-the-war-over-php-annotations) and [discussion](https://laracasts.com/discuss/channels/general-discussion/route-annotation-in-laravel-5) on the matter, @taylorotwell decided to remove Annotation support from the core in favor of extracting Laravel Annotation Support to a third-party package. The result of this decision resulted in this package being maintained by a huge fan of Laravel Annotations.
  
- ## Installation
+## Installation
  
 Begin by installing this package through Composer. Edit your project's `composer.json` file to require `adamgoose/laravel-annotations`.
 
