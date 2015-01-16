@@ -45,7 +45,7 @@ class AnnotationsServiceProvider extends ServiceProvider {
      *
      * @var AnnotationFinder
      */
-    private $finder;
+    protected $finder;
 
     /**
      * @param \Illuminate\Contracts\Foundation\Application $app
