@@ -93,7 +93,7 @@ Likewise, if you wanted to scan `App\Http\Controllers\HomeController` for route 
     ];
 ```
 
-Scanning your event handlers and controllers can be done manully by using `php artisan event:scan` and `php artisan route:scan` respectively, or automatically by setting `protected $scanWhenLocal = true`.
+Scanning your event handlers and controllers can be done manually by using `php artisan event:scan` and `php artisan route:scan` respectively, or automatically by setting `protected $scanWhenLocal = true`.
 
 ### Event Annotations
 
