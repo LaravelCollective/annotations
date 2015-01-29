@@ -7,19 +7,19 @@
 [![License](https://poser.pugx.org/adamgoose/laravel-annotations/license.svg)](https://packagist.org/packages/adamgoose/laravel-annotations)
 
 > During its early stages of development, Laravel 5.0 was gearing up to support Route and Event annotations. With much [controversy](http://www.laravelpodcast.com/episodes/6257-episode-18-the-war-over-php-annotations) and [discussion](https://laracasts.com/discuss/channels/general-discussion/route-annotation-in-laravel-5) on the matter, @taylorotwell decided to remove Annotation support from the core in favor of extracting Laravel Annotation Support to a third-party package. The result of this decision resulted in this package being maintained by a huge fan of Laravel Annotations.
- 
+
 ## Installation
- 
+
 Begin by installing this package through Composer. Edit your project's `composer.json` file to require `adamgoose/laravel-annotations`.
 
     "require": {
         "adamgoose/laravel-annotations": "~5.0"
     }
-    
+
 Next, update Composer from the Terminal:
 
     composer update
-    
+
 Once composer is done, you'll need to create a Service Provider in `app/Providers/AnnotationsServiceProvider.php`.
 
 ```php
@@ -178,3 +178,46 @@ Here's an example that uses all of the available parameters for a `@Get` annotat
 #### @Post, @Options, @Put, @Patch, @Delete
 
 The `@Post`, `@Options`, `@Put`, `@Patch`, and `@Delete` annotations have the exact same syntax as the `@Get` annotation, except it will register a route for the respective HTTP verb, as opposed to the GET verb.
+
+#### @Middleware
+
+As well as defining middleware inline in the route definition tags (`@Get`, `@Post`, etc.), the `@Middleware` tag can be used on its own. It works both individual methods:
+
+```php
+  /**
+   * Show the Login Page
+   *
+   * @Get("login")
+   * @Middleware("guest")
+   */
+  public function login()
+  {
+    return view('index');
+  }
+```
+
+Or on a whole controller, with the same only/exclude filter syntax that you can use elsewhere in laravel:
+
+```php
+/**
+ * @Middleware("guest", except={"logout"})
+ */
+class AuthController extends Controller {
+
+  /**
+   * Log the user out.
+   *
+   * @Get("logout", as="logout")
+   * @Middleware("auth")
+   *
+   * @return Response
+   */
+  public function logout()
+  {
+    $this->auth->logout();
+
+    return redirect( route('login') );
+  }
+
+}
+```
