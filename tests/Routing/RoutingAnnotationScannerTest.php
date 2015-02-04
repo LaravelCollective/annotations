@@ -1,6 +1,6 @@
 <?php
 
-use Adamgoose\Routing\Annotations\Scanner;
+use Collective\Annotations\Routing\Annotations\Scanner;
 
 class RoutingAnnotationScannerTest extends PHPUnit_Framework_TestCase {
 
