@@ -1,10 +1,10 @@
 ## Annotations for The Laravel Framework
 
-[![Build Status](https://travis-ci.org/laravelcollective/annotations.svg)](https://travis-ci.org/laravelcollective/annotations)
-[![Total Downloads](https://poser.pugx.org/laravelcollective/annotations/downloads.svg)](https://packagist.org/packages/laravelcollective/annotations)
-[![Latest Stable Version](https://poser.pugx.org/laravelcollective/annotations/v/stable.svg)](https://packagist.org/packages/laravelcollective/annotations)
-[![Latest Unstable Version](https://poser.pugx.org/laravelcollective/annotations/v/unstable.svg)](https://packagist.org/packages/laravelcollective/annotations)
-[![License](https://poser.pugx.org/laravelcollective/annotations/license.svg)](https://packagist.org/packages/laravelcollective/annotations)
+[![Build Status](https://travis-ci.org/LaravelCollective/annotations.svg)](https://travis-ci.org/LaravelCollective/annotations)
+[![Total Downloads](https://poser.pugx.org/LaravelCollective/annotations/downloads.svg)](https://packagist.org/packages/laravelcollective/annotations)
+[![Latest Stable Version](https://poser.pugx.org/LaravelCollective/annotations/v/stable.svg)](https://packagist.org/packages/laravelcollective/annotations)
+[![Latest Unstable Version](https://poser.pugx.org/LaravelCollective/annotations/v/unstable.svg)](https://packagist.org/packages/laravelcollective/annotations)
+[![License](https://poser.pugx.org/LaravelCollective/annotations/license.svg)](https://packagist.org/packages/laravelcollective/annotations)
 
 > During its early stages of development, Laravel 5.0 was gearing up to support Route and Event annotations. With much [controversy](http://www.laravelpodcast.com/episodes/6257-episode-18-the-war-over-php-annotations) and [discussion](https://laracasts.com/discuss/channels/general-discussion/route-annotation-in-laravel-5) on the matter, @taylorotwell decided to remove Annotation support from the core in favor of extracting Laravel Annotation Support to a third-party package. The result of this decision resulted in this package being maintained by a huge fan of Laravel Annotations.
 
