@@ -177,9 +177,9 @@ Here's an example that uses all of the available parameters for a `@Get` annotat
    */
 ```
 
-#### @Post, @Options, @Put, @Patch, @Delete
+#### @Post, @Options, @Put, @Patch, @Delete, @Any
 
-The `@Post`, `@Options`, `@Put`, `@Patch`, and `@Delete` annotations have the exact same syntax as the `@Get` annotation, except it will register a route for the respective HTTP verb, as opposed to the GET verb.
+The `@Post`, `@Options`, `@Put`, `@Patch`, `@Delete` and `@Any` annotations have the exact same syntax as the `@Get` annotation, except it will register a route for the respective HTTP verb, as opposed to the GET verb.
 
 #### @Middleware
 
