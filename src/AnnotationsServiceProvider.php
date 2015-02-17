@@ -63,6 +63,9 @@ class AnnotationsServiceProvider extends ServiceProvider {
      */
     public function register()
     {
+        $this->registerRouteScanner();
+        $this->registerEventScanner();
+
         $this->registerCommands();
     }
 
