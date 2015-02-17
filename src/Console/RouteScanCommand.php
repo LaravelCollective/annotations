@@ -65,9 +65,11 @@ class RouteScanCommand extends Command {
     {
         $provider = 'Collective\Annotations\AnnotationsServiceProvider';
 
-        return '<?php '.PHP_EOL.PHP_EOL.Scanner::create(
-          $this->laravel->getProvider($provider)->routeScans()
-        )->getRouteDefinitions().PHP_EOL;
+        $scanner = $this->laravel->make('annotations.route.scanner');
+
+        $scanner->setClassesToScan($this->laravel->getProvider($provider)->routeScans());
+
+        return '<?php '.PHP_EOL.PHP_EOL.$scanner->getRouteDefinitions().PHP_EOL;
     }
 
     /**
