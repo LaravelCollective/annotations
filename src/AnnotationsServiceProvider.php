@@ -2,12 +2,15 @@
 
 use Collective\Annotations\Console\EventScanCommand;
 use Collective\Annotations\Console\RouteScanCommand;
+use Illuminate\Console\AppNamespaceDetectorTrait;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Collective\Annotations\Events\Annotations\Scanner as EventScanner;
 use Collective\Annotations\Routing\Annotations\Scanner as RouteScanner;
 
 class AnnotationsServiceProvider extends ServiceProvider {
+
+    use AppNamespaceDetectorTrait;
 
     /**
      * The commands to be registered.
@@ -39,6 +42,14 @@ class AnnotationsServiceProvider extends ServiceProvider {
      * @var bool
      */
     protected $scanWhenLocal = false;
+
+    /**
+     * Determines whether or not to automatically scan the controllers
+     * directory (App\Http\Controllers) for routes
+     *
+     * @var bool
+     */
+    protected $scanControllers = false;
 
     /**
      * File finder for annotations.
@@ -241,6 +252,53 @@ class AnnotationsServiceProvider extends ServiceProvider {
      */
     public function routeScans()
     {
-        return $this->scanRoutes;
+        $classes = $this->scanRoutes;
+
+        // scan the controllers namespace if the flag is set
+        if ( $this->scanControllers )
+        {
+            $classes = array_merge(
+                $classes,
+                $this->getClassesFromNamespace( $this->getAppNamespace() . 'Http\\Controllers' )
+            );
+        }
+
+        return $classes;
+
     }
+
+    /**
+     * Convert the given namespace to a file path
+     *
+     * @param  string $namespace the namespace to convert
+     * @return string
+     */
+    public function convertNamespaceToPath( $namespace )
+    {
+        // remove the app namespace from the namespace if it is there
+        $appNamespace = $this->getAppNamespace();
+
+        if (substr($namespace, 0, strlen($appNamespace)) == $appNamespace)
+        {
+            $namespace = substr($namespace, strlen($appNamespace));
+        }
+
+        // trim and return the path
+        return str_replace('\\', '/', trim($namespace, ' \\') );
+    }
+
+    /**
+     * Get a list of the classes in a namespace. Leaving the second argument
+     * will scan for classes within the project's app directory
+     *
+     * @param  string $namespace the namespace to search
+     * @return array
+     */
+    public function getClassesFromNamespace( $namespace, $base = null )
+    {
+        $directory = ( $base ?: $this->app->make('path') ) . '/' . $this->convertNamespaceToPath( $namespace );
+
+        return $this->app->make('Illuminate\Filesystem\ClassFinder')->findClasses( $directory );
+    }
+
 }
