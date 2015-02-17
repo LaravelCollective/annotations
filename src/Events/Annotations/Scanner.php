@@ -2,18 +2,12 @@
 
 use Exception;
 use ReflectionClass;
-use Symfony\Component\Finder\Finder;
+use Collective\Annotations\AnnotationScanner;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\SimpleAnnotationReader;
+use Symfony\Component\Finder\Finder;
 
-class Scanner {
-
-	/**
-	 * The classes to scan for annotations.
-	 *
-	 * @var array
-	 */
-	protected $scan;
+class Scanner extends AnnotationScanner {
 
 	/**
 	 * Create a new event scanner instance.
@@ -30,17 +24,6 @@ class Scanner {
 			AnnotationRegistry::registerFile($file->getRealPath());
 		}
 	}
-
-	/**
-	 * Create a new scanner instance.
-	 *
-	 * @param  array  $scan
-	 * @return static
-	 */
-	 public static function create(array $scan)
-	 {
-	 	return new static($scan);
-	 }
 
 	/**
 	 * Convert the scanned annotations into route definitions.
@@ -78,43 +61,6 @@ class Scanner {
 	protected function buildListener($class, $method, $events)
 	{
 		return sprintf('$events->listen(%s, \''.$class.'@'.$method.'\');', var_export($events, true)).PHP_EOL;
-	}
-
-	/**
-	 * Get all of the ReflectionClass instances in the scan path.
-	 *
-	 * @return array
-	 */
-	protected function getClassesToScan()
-	{
-		$classes = [];
-
-		foreach ($this->scan as $class)
-		{
-			try
-			{
-				$classes[] = new ReflectionClass($class);
-			}
-			catch (Exception $e)
-			{
-				//
-			}
-		}
-
-		return $classes;
-	}
-
-	/**
-	 * Get an annotation reader instance.
-	 *
-	 * @return \Doctrine\Common\Annotations\SimpleAnnotationReader
-	 */
-	protected function getReader()
-	{
-		with($reader = new SimpleAnnotationReader)
-				->addNamespace('Collective\Annotations\Events\Annotations\Annotations');
-
-		return $reader;
 	}
 
 }
