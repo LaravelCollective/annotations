@@ -135,7 +135,7 @@ class AnnotationsServiceProvider extends ServiceProvider {
             $this->scanEvents();
         }
 
-        if ( ! empty($this->scanEvents) && $this->finder->eventsAreScanned())
+        if ( ! empty($this->eventScans()) && $this->finder->eventsAreScanned())
         {
             $this->loadScannedEvents();
         }
@@ -148,12 +148,12 @@ class AnnotationsServiceProvider extends ServiceProvider {
      */
     protected function scanEvents()
     {
-        if (empty($this->scanEvents))
+        if (empty($this->eventScans()))
         {
             return;
         }
 
-        $scanner = new EventScanner($this->scanEvents);
+        $scanner = new EventScanner($this->eventScans());
 
         file_put_contents(
           $this->finder->getScannedEventsPath(), '<?php ' . $scanner->getEventDefinitions()
@@ -184,7 +184,7 @@ class AnnotationsServiceProvider extends ServiceProvider {
             $this->scanRoutes();
         }
 
-        if ( ! empty($this->scanRoutes) && $this->finder->routesAreScanned())
+        if ( ! empty($this->routeScans()) && $this->finder->routesAreScanned())
         {
             $this->loadScannedRoutes();
         }
@@ -197,12 +197,12 @@ class AnnotationsServiceProvider extends ServiceProvider {
      */
     protected function scanRoutes()
     {
-        if (empty($this->scanRoutes))
+        if (empty($this->routeScans()))
         {
             return;
         }
 
-        $scanner = new RouteScanner($this->scanRoutes);
+        $scanner = new RouteScanner($this->routeScans());
 
         file_put_contents(
           $this->finder->getScannedRoutesPath(), '<?php ' . $scanner->getRouteDefinitions()
