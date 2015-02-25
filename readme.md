@@ -52,6 +52,14 @@ class AnnotationsServiceProvider extends ServiceProvider {
      */
     protected $scanWhenLocal = false;
 
+    /**
+     * Determines whether or not to automatically scan the controllers
+     * directory (App\Http\Controllers) for routes
+     *
+     * @var bool
+     */
+    protected $scanControllers = false;
+
 }
 ```
 
@@ -177,9 +185,9 @@ Here's an example that uses all of the available parameters for a `@Get` annotat
    */
 ```
 
-#### @Post, @Options, @Put, @Patch, @Delete
+#### @Post, @Options, @Put, @Patch, @Delete, @Any
 
-The `@Post`, `@Options`, `@Put`, `@Patch`, and `@Delete` annotations have the exact same syntax as the `@Get` annotation, except it will register a route for the respective HTTP verb, as opposed to the GET verb.
+The `@Post`, `@Options`, `@Put`, `@Patch`, `@Delete` and `@Any` annotations have the exact same syntax as the `@Get` annotation, except it will register a route for the respective HTTP verb, as opposed to the GET verb.
 
 #### @Middleware
 
@@ -221,5 +229,58 @@ class AuthController extends Controller {
     return redirect( route('login') );
   }
 
+}
+
+```
+
+#### Scan the Controllers Directory
+
+To recursively scan the entire controllers namespace ( `App\Http\Controllers` ), you can set the `$scanControllers` flag to true.
+
+It will automatically adjust `App` to your app's namespace.
+
+```php
+    $scanControllers = true;
+```
+
+### Advanced
+
+If you want to use any logic to add classes to the list to scan, you can override the `routeScans()` or `eventScans()` methods.
+
+The following is an example of adding a controller to the scan list if the current environment is `local`:
+
+```php
+public function routeScans() {
+    $classes = parent::routeScans();
+
+    if ( $this->app->environment('local') ) {
+        $classes = array_merge($classes, ['App\\Http\\Controllers\\LocalOnlyController']);
+    }
+
+    return $classes;
+}
+```
+
+#### Scanning Namespaces
+
+You can use the `getClassesFromNamespace( $namespace )` method to recursively add namespaces to the list. This will scan the given namespace. It only works for classes in the `app` directory, and relies on the PSR-4 namespacing standard.
+
+This is what the `$scanControllers` flag uses with the controllers directory.
+
+Here is an example that builds on the last one - adding a whole local-only namespace.
+
+```php
+public function routeScans() {
+    $classes = parent::routeScans();
+
+    if ( $this->app->environment('local') ) {
+    {
+        $classes = array_merge(
+            $classes,
+            $this->getClassesFromNamespace( 'App\\Http\\Controllers\\Local' )
+        );
+    }
+
+    return $classes;
 }
 ```
