@@ -54,6 +54,11 @@ class RouteScanCommand extends Command {
         $this->files->put($this->getOutputPath(), $this->getRouteDefinitions());
 
         $this->info('Routes scanned!');
+
+        if ($this->option('list'))
+        {
+            $this->call('route:list');
+        }
     }
 
     /**
@@ -93,6 +98,8 @@ class RouteScanCommand extends Command {
           ['namespace', null, InputOption::VALUE_OPTIONAL, 'The root namespace for the controllers.', $namespace],
 
           ['path', null, InputOption::VALUE_OPTIONAL, 'The path to scan.', 'Http'.DIRECTORY_SEPARATOR.'Controllers'],
+
+          ['list', null, InputOption::VALUE_NONE, 'List all registered routes'],
         ];
     }
 
