@@ -284,3 +284,70 @@ public function routeScans() {
     return $classes;
 }
 ```
+
+## Custom Annotations
+
+If you want to register your own annotations, create a namespace containing subclasses of `Collective\Annotations\Routing\Annotations\Annotations\Annotation` - let's say `App\Http\Annotations`.
+
+Then, in your annotations service provider, override the `addRoutingAnnotations( RouteScanner $scanner )` method, and register your routing annotations namespace:
+
+```php
+<?php namespace App\Providers;
+
+use Collective\Annotations\Routing\Annotations\Scanner as RouteScanner;
+
+/* ... then, in the class definition ... */
+
+    /**
+     * Add annotation classes to the route scanner
+     *
+     * @param RouteScanner $namespace
+     */
+    public function addRoutingAnnotations( RouteScanner $scanner )
+    {
+      $scanner->addAnnotationNamespace( 'App\Http\Annotations' );
+    }
+```
+
+Your annotation classes must must have the `@Annotation` class annotation (see the following example).
+
+There is an equivalent method for event annotations: `addEventAnnotations( EventScanner $scanner )`.
+
+### Custom Annotation Example
+
+Here is an example to make an `@Auth` annotation. It provides the same functionality as using the annotation `@Middleware("auth")`.
+
+In a namespace - in this example, `App\Annotations`:
+
+```php
+<?php namespace App\Http\Annotations;
+
+use Collective\Annotations\Routing\Annotations\Annotations\Annotation;
+use Collective\Annotations\Routing\Annotations\MethodEndpoint;
+use ReflectionMethod;
+
+/**
+ * @Annotation
+ */
+class Auth extends Annotation {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function modify(MethodEndpoint $endpoint, ReflectionMethod $method)
+  {
+    if ($endpoint->hasPaths())
+    {
+      foreach ($endpoint->getPaths() as $path)
+      {
+        $path->middleware = array_merge($path->middleware, (array) 'auth');
+      }
+    }
+    else
+    {
+      $endpoint->middleware = array_merge($endpoint->middleware, (array) 'auth');
+    }
+  }
+
+}
+```

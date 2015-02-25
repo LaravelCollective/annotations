@@ -74,6 +74,9 @@ class AnnotationsServiceProvider extends ServiceProvider {
      */
     public function register()
     {
+        $this->registerRouteScanner();
+        $this->registerEventScanner();
+
         $this->registerCommands();
     }
 
@@ -84,7 +87,11 @@ class AnnotationsServiceProvider extends ServiceProvider {
      */
     public function boot()
     {
+        $this->addEventAnnotations( $this->app->make('annotations.event.scanner') );
+
         $this->loadAnnotatedEvents();
+
+        $this->addRoutingAnnotations( $this->app->make('annotations.route.scanner') );
 
         if ( ! $this->app->routesAreCached())
         {
@@ -135,6 +142,60 @@ class AnnotationsServiceProvider extends ServiceProvider {
     }
 
     /**
+     * Register the scanner.
+     *
+     * @return void
+     */
+    protected function registerRouteScanner()
+    {
+        $this->app->bindShared('annotations.route.scanner', function ($app)
+        {
+            $scanner = new RouteScanner([]);
+
+            $scanner->addAnnotationNamespace(
+                'Collective\Annotations\Routing\Annotations\Annotations',
+                __DIR__.'/Routing/Annotations/Annotations'
+            );
+
+            return $scanner;
+        });
+    }
+
+    /**
+     * Register the scanner.
+     *
+     * @return void
+     */
+    protected function registerEventScanner()
+    {
+        $this->app->bindShared('annotations.event.scanner', function ($app)
+        {
+            $scanner = new EventScanner([]);
+
+            $scanner->addAnnotationNamespace(
+                'Collective\Annotations\Events\Annotations\Annotations',
+                __DIR__.'/Events/Annotations/Annotations'
+            );
+
+            return $scanner;
+        });
+    }
+
+    /**
+     * Add annotation classes to the event scanner
+     *
+     * @param RouteScanner $namespace
+     */
+    public function addEventAnnotations( EventScanner $scanner ) {}
+
+    /**
+     * Add annotation classes to the route scanner
+     *
+     * @param RouteScanner $namespace
+     */
+    public function addRoutingAnnotations( RouteScanner $scanner ) {}
+
+    /**
      * Load the annotated events.
      *
      * @return void
@@ -168,7 +229,9 @@ class AnnotationsServiceProvider extends ServiceProvider {
             return;
         }
 
-        $scanner = new EventScanner($scans);
+        $scanner = $this->app->make('annotations.event.scanner');
+
+        $scanner->setClassesToScan($scans);
 
         file_put_contents(
           $this->finder->getScannedEventsPath(), '<?php ' . $scanner->getEventDefinitions()
@@ -221,7 +284,9 @@ class AnnotationsServiceProvider extends ServiceProvider {
             return;
         }
 
-        $scanner = new RouteScanner($scans);
+        $scanner = $this->app->make('annotations.route.scanner');
+
+        $scanner->setClassesToScan($scans);
 
         file_put_contents(
           $this->finder->getScannedRoutesPath(), '<?php ' . $scanner->getRouteDefinitions()
