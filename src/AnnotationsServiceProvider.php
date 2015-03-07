@@ -1,12 +1,14 @@
 <?php namespace Collective\Annotations;
 
 use Collective\Annotations\Console\EventScanCommand;
+use Collective\Annotations\Console\ModelScanCommand;
 use Collective\Annotations\Console\RouteScanCommand;
 use Illuminate\Console\AppNamespaceDetectorTrait;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Collective\Annotations\Events\Annotations\Scanner as EventScanner;
 use Collective\Annotations\Routing\Annotations\Scanner as RouteScanner;
+use Collective\Annotations\Database\Eloquent\Annotations\Scanner as ModelScanner;
 
 class AnnotationsServiceProvider extends ServiceProvider {
 
@@ -20,6 +22,7 @@ class AnnotationsServiceProvider extends ServiceProvider {
     protected $commands = [
       'EventScan' => 'command.event.scan',
       'RouteScan' => 'command.route.scan',
+      'ModelScan' => 'command.model.scan',
     ];
 
     /**
@@ -35,6 +38,13 @@ class AnnotationsServiceProvider extends ServiceProvider {
      * @var array
      */
     protected $scanRoutes = [];
+
+    /**
+     * The classes to scan for model binding annotations.
+     *
+     * @var array
+     */
+    protected $scanModels = [];
 
     /**
      * Determines if we will auto-scan in the local environment.
@@ -76,6 +86,7 @@ class AnnotationsServiceProvider extends ServiceProvider {
     {
         $this->registerRouteScanner();
         $this->registerEventScanner();
+        $this->registerModelScanner();
 
         $this->registerCommands();
     }
@@ -87,15 +98,22 @@ class AnnotationsServiceProvider extends ServiceProvider {
      */
     public function boot()
     {
-        $this->addEventAnnotations( $this->app->make('annotations.event.scanner') );
+        $this->addEventAnnotations($this->app->make('annotations.event.scanner'));
 
         $this->loadAnnotatedEvents();
 
-        $this->addRoutingAnnotations( $this->app->make('annotations.route.scanner') );
+        $this->addRoutingAnnotations($this->app->make('annotations.route.scanner'));
 
         if ( ! $this->app->routesAreCached())
         {
             $this->loadAnnotatedRoutes();
+        }
+
+        $this->addModelAnnotations($this->app->make('annotations.model.scanner'));
+
+        if ( ! $this->app->routesAreCached())
+        {
+            $this->loadAnnotatedModels();
         }
     }
 
@@ -142,6 +160,19 @@ class AnnotationsServiceProvider extends ServiceProvider {
     }
 
     /**
+     * Register the command.
+     *
+     * @return void
+     */
+    protected function registerModelScanCommand()
+    {
+        $this->app->singleton('command.model.scan', function ($app)
+        {
+            return new ModelScanCommand($app['files']);
+        });
+    }
+
+    /**
      * Register the scanner.
      *
      * @return void
@@ -153,8 +184,8 @@ class AnnotationsServiceProvider extends ServiceProvider {
             $scanner = new RouteScanner([]);
 
             $scanner->addAnnotationNamespace(
-                'Collective\Annotations\Routing\Annotations\Annotations',
-                __DIR__.'/Routing/Annotations/Annotations'
+              'Collective\Annotations\Routing\Annotations\Annotations',
+              __DIR__ . '/Routing/Annotations/Annotations'
             );
 
             return $scanner;
@@ -173,8 +204,28 @@ class AnnotationsServiceProvider extends ServiceProvider {
             $scanner = new EventScanner([]);
 
             $scanner->addAnnotationNamespace(
-                'Collective\Annotations\Events\Annotations\Annotations',
-                __DIR__.'/Events/Annotations/Annotations'
+              'Collective\Annotations\Events\Annotations\Annotations',
+              __DIR__ . '/Events/Annotations/Annotations'
+            );
+
+            return $scanner;
+        });
+    }
+
+    /**
+     * Register the scanner.
+     *
+     * @return void
+     */
+    protected function registerModelScanner()
+    {
+        $this->app->bindShared('annotations.model.scanner', function ($app)
+        {
+            $scanner = new ModelScanner([]);
+
+            $scanner->addAnnotationNamespace(
+              'Collective\Annotations\Database\Eloquent\Annotations\Annotations',
+              __DIR__ . '/Database/Eloquent/Annotations/Annotations'
             );
 
             return $scanner;
@@ -184,16 +235,29 @@ class AnnotationsServiceProvider extends ServiceProvider {
     /**
      * Add annotation classes to the event scanner
      *
-     * @param RouteScanner $namespace
+     * @param RouteScanner $scanner
      */
-    public function addEventAnnotations( EventScanner $scanner ) {}
+    public function addEventAnnotations(EventScanner $scanner)
+    {
+    }
 
     /**
      * Add annotation classes to the route scanner
      *
-     * @param RouteScanner $namespace
+     * @param RouteScanner $scanner
      */
-    public function addRoutingAnnotations( RouteScanner $scanner ) {}
+    public function addRoutingAnnotations(RouteScanner $scanner)
+    {
+    }
+
+    /**
+     * Add annotation classes to the model scanner
+     *
+     * @param ModelScanner $scanner
+     */
+    public function addModelAnnotations(ModelScanner $scanner)
+    {
+    }
 
     /**
      * Load the annotated events.
@@ -309,6 +373,64 @@ class AnnotationsServiceProvider extends ServiceProvider {
     }
 
     /**
+     * Load the annotated models
+     *
+     * @return void
+     */
+    protected function loadAnnotatedModels()
+    {
+        if ($this->app->environment('local') && $this->scanWhenLocal)
+        {
+            $this->scanModels();
+        }
+
+        $scans = $this->modelScans();
+
+        if ( ! empty($scans) && $this->finder->modelsAreScanned())
+        {
+            $this->loadScannedModels();
+        }
+    }
+
+    /**
+     * Scan the models and write the scanned models file.
+     *
+     * @return void
+     */
+    protected function scanModels()
+    {
+        $scans = $this->modelScans();
+
+        if (empty($scans))
+        {
+            return;
+        }
+
+        $scanner = $this->app->make('annotations.model.scanner');
+
+        $scanner->setClassesToScan($scans);
+
+        file_put_contents(
+          $this->finder->getScannedModelsPath(), '<?php ' . $scanner->getModelDefinitions()
+        );
+    }
+
+    /**
+     * Load the scanned application models.
+     *
+     * @return void
+     */
+    protected function loadScannedModels()
+    {
+        $this->app->booted(function ()
+        {
+            $router = $this->app['Illuminate\Contracts\Routing\Registrar'];
+
+            require $this->finder->getScannedModelsPath();
+        });
+    }
+
+    /**
      * Get the classes to be scanned by the provider.
      *
      * @return array
@@ -328,25 +450,35 @@ class AnnotationsServiceProvider extends ServiceProvider {
         $classes = $this->scanRoutes;
 
         // scan the controllers namespace if the flag is set
-        if ( $this->scanControllers )
+        if ($this->scanControllers)
         {
             $classes = array_merge(
-                $classes,
-                $this->getClassesFromNamespace( $this->getAppNamespace() . 'Http\\Controllers' )
+              $classes,
+              $this->getClassesFromNamespace($this->getAppNamespace() . 'Http\\Controllers')
             );
         }
 
         return $classes;
+    }
 
+    /**
+     * Get the classes to be scanned by the rovider.
+     *
+     * @return array
+     */
+    public function modelScans()
+    {
+        return $this->scanModels;
     }
 
     /**
      * Convert the given namespace to a file path
      *
      * @param  string $namespace the namespace to convert
+     *
      * @return string
      */
-    public function convertNamespaceToPath( $namespace )
+    public function convertNamespaceToPath($namespace)
     {
         // remove the app namespace from the namespace if it is there
         $appNamespace = $this->getAppNamespace();
@@ -357,7 +489,7 @@ class AnnotationsServiceProvider extends ServiceProvider {
         }
 
         // trim and return the path
-        return str_replace('\\', '/', trim($namespace, ' \\') );
+        return str_replace('\\', '/', trim($namespace, ' \\'));
     }
 
     /**
@@ -365,13 +497,13 @@ class AnnotationsServiceProvider extends ServiceProvider {
      * will scan for classes within the project's app directory
      *
      * @param  string $namespace the namespace to search
+     *
      * @return array
      */
-    public function getClassesFromNamespace( $namespace, $base = null )
+    public function getClassesFromNamespace($namespace, $base = null)
     {
-        $directory = ( $base ?: $this->app->make('path') ) . '/' . $this->convertNamespaceToPath( $namespace );
+        $directory = ($base ?: $this->app->make('path')) . '/' . $this->convertNamespaceToPath($namespace);
 
-        return $this->app->make('Illuminate\Filesystem\ClassFinder')->findClasses( $directory );
+        return $this->app->make('Illuminate\Filesystem\ClassFinder')->findClasses($directory);
     }
-
 }
