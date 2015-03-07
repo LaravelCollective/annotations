@@ -57,4 +57,24 @@ class AnnotationFinder {
     {
         return $this->app['path.storage'] . '/framework/events.scanned.php';
     }
+
+    /**
+     * Determine if the application models have been scanned.
+     *
+     * @return string
+     */
+    public function modelsAreScanned()
+    {
+      return $this->app['files']->exists($this->getScannedModelsPath());
+    }
+
+    /**
+     * Get the path to the scanned models file.
+     *
+     * @return string
+     */
+    public function getScannedModelsPath()
+    {
+      return $this->app['path.storage'] . '/framework/models.scanned.php';
+    }
 }
