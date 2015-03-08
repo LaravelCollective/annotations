@@ -6,4 +6,4 @@
 [![Latest Unstable Version](https://poser.pugx.org/LaravelCollective/annotations/v/unstable.svg)](https://packagist.org/packages/laravelcollective/annotations)
 [![License](https://poser.pugx.org/LaravelCollective/annotations/license.svg)](https://packagist.org/packages/laravelcollective/annotations)
 
-Official documentation for Annotations for The Laravel Framework can be dound at the [LaravelCollective](http://laravelcollective.com) website.
+Official documentation for Annotations for The Laravel Framework can be found at the [LaravelCollective](http://laravelcollective.com) website.
