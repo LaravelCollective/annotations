@@ -38,12 +38,14 @@ class Scanner extends AnnotationScanner {
 
         foreach ($this->getClassesToScan() as $class)
         {
-            if ( ! $this->extendsEloquent($class))
+            $annotations = $reader->getClassAnnotations($class);
+
+            if ( count($annotations) > 0 && ! $this->extendsEloquent($class))
             {
-                throw new InvalidBindingResolverException('Class [' . $class->name . '] does not extend [Illuminate\Database\Eloquent\Model].');
+                throw new InvalidBindingResolverException('Class [' . $class->name . '] is not a subclass of [Illuminate\Database\Eloquent\Model].');
             }
 
-            foreach ($reader->getClassAnnotations($class) as $annotation)
+            foreach ($annotations as $annotation)
             {
                 $output .= $this->buildBinding($annotation->binding, $class->name);
             }
