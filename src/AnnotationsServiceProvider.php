@@ -142,7 +142,7 @@ class AnnotationsServiceProvider extends ServiceProvider {
     {
         $this->app->singleton('command.event.scan', function ($app)
         {
-            return new EventScanCommand($app['files']);
+            return new EventScanCommand($app['files'], $this);
         });
     }
 
@@ -155,7 +155,7 @@ class AnnotationsServiceProvider extends ServiceProvider {
     {
         $this->app->singleton('command.route.scan', function ($app)
         {
-            return new RouteScanCommand($app['files']);
+            return new RouteScanCommand($app['files'], $this);
         });
     }
 
@@ -168,7 +168,7 @@ class AnnotationsServiceProvider extends ServiceProvider {
     {
         $this->app->singleton('command.model.scan', function ($app)
         {
-            return new ModelScanCommand($app['files']);
+            return new ModelScanCommand($app['files'], $this);
         });
     }
 

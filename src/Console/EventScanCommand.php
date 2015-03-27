@@ -1,5 +1,6 @@
 <?php namespace Collective\Annotations\Console;
 
+use Collective\Annotations\AnnotationsServiceProvider;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Collective\Annotations\Events\Annotations\Scanner;
@@ -29,16 +30,24 @@ class EventScanCommand extends Command {
     protected $files;
 
     /**
+     * The Service Provider instance.
+     *
+     * @var AnnotationsServiceProvider
+     */
+    protected $provider;
+
+    /**
      * Create a new event scan command instance.
      *
-     * @param  \Illuminate\Filesystem\Filesystem  $files
-     * @return void
+     * @param  \Illuminate\Filesystem\Filesystem $files
+     * @param AnnotationsServiceProvider         $provider
      */
-    public function __construct(Filesystem $files)
+    public function __construct(Filesystem $files, AnnotationsServiceProvider $provider)
     {
         parent::__construct();
 
         $this->files = $files;
+        $this->provider = $provider;
     }
 
     /**
@@ -60,11 +69,9 @@ class EventScanCommand extends Command {
      */
     protected function getEventDefinitions()
     {
-        $provider = 'Collective\Annotations\AnnotationsServiceProvider';
-
         $scanner = $this->laravel->make('annotations.event.scanner');
 
-        $scanner->setClassesToScan($this->laravel->getProvider($provider)->eventScans());
+        $scanner->setClassesToScan($this->provider->eventScans());
 
         return '<?php '.PHP_EOL.PHP_EOL.$scanner->getEventDefinitions().PHP_EOL;
     }

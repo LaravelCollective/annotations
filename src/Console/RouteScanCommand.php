@@ -1,8 +1,8 @@
 <?php namespace Collective\Annotations\Console;
 
+use Collective\Annotations\AnnotationsServiceProvider;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
-use Collective\Annotations\Routing\Annotations\Scanner;
 use Symfony\Component\Console\Input\InputOption;
 use Illuminate\Console\AppNamespaceDetectorTrait;
 
@@ -32,16 +32,24 @@ class RouteScanCommand extends Command {
     protected $files;
 
     /**
+     * The Service Provider instance.
+     *
+     * @var AnnotationsServiceProvider
+     */
+    protected $provider;
+
+    /**
      * Create a new event scan command instance.
      *
-     * @param  \Illuminate\Filesystem\Filesystem  $files
-     * @return void
+     * @param  \Illuminate\Filesystem\Filesystem $files
+     * @param AnnotationsServiceProvider         $provider
      */
-    public function __construct(Filesystem $files)
+    public function __construct(Filesystem $files, AnnotationsServiceProvider $provider)
     {
         parent::__construct();
 
         $this->files = $files;
+        $this->provider = $provider;
     }
 
     /**
@@ -68,11 +76,9 @@ class RouteScanCommand extends Command {
      */
     protected function getRouteDefinitions()
     {
-        $provider = 'Collective\Annotations\AnnotationsServiceProvider';
-
         $scanner = $this->laravel->make('annotations.route.scanner');
 
-        $scanner->setClassesToScan($this->laravel->getProvider($provider)->routeScans());
+        $scanner->setClassesToScan($this->provider->routeScans());
 
         return '<?php '.PHP_EOL.PHP_EOL.$scanner->getRouteDefinitions().PHP_EOL;
     }
