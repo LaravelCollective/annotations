@@ -63,7 +63,7 @@ class Scanner extends AnnotationScanner {
      */
     protected function extendsEloquent(ReflectionClass $class)
     {
-        return $class->getParentClass() && $class->getParentClass()->name == 'Illuminate\Database\Eloquent\Model';
+        return $class->isSubclassOf('Illuminate\Database\Eloquent\Model');
     }
 
     /**
