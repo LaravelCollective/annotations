@@ -55,11 +55,19 @@ class AnnotationsServiceProvider extends ServiceProvider {
 
     /**
      * Determines whether or not to automatically scan the controllers
-     * directory (App\Http\Controllers) for routes
+     * directory (App\Http\Controllers) for routes.
      *
      * @var bool
      */
     protected $scanControllers = false;
+
+    /**
+     * Determines whether or not to automatically scan all namespaced
+     * classes for event, route, and model annotations.
+     *
+     * @var bool
+     */
+    protected $scanEverything = false;
 
     /**
      * File finder for annotations.
@@ -437,6 +445,11 @@ class AnnotationsServiceProvider extends ServiceProvider {
      */
     public function eventScans()
     {
+        if ($this->scanEverything)
+        {
+            return $this->getAllClasses();
+        }
+
         return $this->scanEvents;
     }
 
@@ -447,6 +460,11 @@ class AnnotationsServiceProvider extends ServiceProvider {
      */
     public function routeScans()
     {
+        if ($this->scanEverything)
+        {
+            return $this->getAllClasses();
+        }
+
         $classes = $this->scanRoutes;
 
         // scan the controllers namespace if the flag is set
@@ -462,12 +480,17 @@ class AnnotationsServiceProvider extends ServiceProvider {
     }
 
     /**
-     * Get the classes to be scanned by the rovider.
+     * Get the classes to be scanned by the provider.
      *
      * @return array
      */
     public function modelScans()
     {
+        if ($this->scanEverything)
+        {
+            return $this->getAllClasses();
+        }
+
         return $this->scanModels;
     }
 
@@ -496,7 +519,8 @@ class AnnotationsServiceProvider extends ServiceProvider {
      * Get a list of the classes in a namespace. Leaving the second argument
      * will scan for classes within the project's app directory
      *
-     * @param  string $namespace the namespace to search
+     * @param string  $namespace the namespace to search
+     * @param null    $base
      *
      * @return array
      */
@@ -505,5 +529,15 @@ class AnnotationsServiceProvider extends ServiceProvider {
         $directory = ($base ?: $this->app->make('path')) . '/' . $this->convertNamespaceToPath($namespace);
 
         return $this->app->make('Illuminate\Filesystem\ClassFinder')->findClasses($directory);
+    }
+
+    /**
+     * Get a list of classes in the root namespace.
+     *
+     * @return array
+     */
+    protected function getAllClasses()
+    {
+        return $this->getClassesFromNamespace($this->getAppNamespace());
     }
 }
