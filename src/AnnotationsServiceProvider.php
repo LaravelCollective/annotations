@@ -119,10 +119,7 @@ class AnnotationsServiceProvider extends ServiceProvider {
 
         $this->addModelAnnotations($this->app->make('annotations.model.scanner'));
 
-        if ( ! $this->app->routesAreCached())
-        {
-            $this->loadAnnotatedModels();
-        }
+        $this->loadAnnotatedModels();
     }
 
     /**
