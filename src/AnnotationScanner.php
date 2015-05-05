@@ -3,6 +3,7 @@
 use Collective\Annotations\NamespaceToPathConverterTrait;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\SimpleAnnotationReader;
+use Exception;
 use ReflectionClass;
 use Symfony\Component\Finder\Finder;
 
