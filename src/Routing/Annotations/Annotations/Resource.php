@@ -27,6 +27,8 @@ class Resource extends Annotation {
 			'reflection' => $class, 'name' => $this->value, 'names' => (array) $this->names,
 			'only' => (array) $this->only, 'except' => (array) $this->except,
 			'middleware' => $this->getMiddleware($endpoints),
+			'domain' => $this->domain,
+			'prefix' => $this->prefix
 		]));
 	}
 

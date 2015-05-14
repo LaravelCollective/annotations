@@ -136,7 +136,8 @@ class ResourceEndpoint implements EndpointInterface {
 				$this->getTemplate(), 'Resource: '.$this->name.'@'.$path->method,
 				$this->implodeArray($this->getMiddleware($path)),
 				var_export($path->path, true), $this->implodeArray($path->where),
-				var_export($path->domain, true), var_export($this->name, true),
+				var_export($this->domain, true), var_export($this->name, true),
+				var_export($this->prefix, true),
 				var_export($this->reflection->name, true), $this->implodeArray([$path->method]),
 				$this->implodeArray($this->getNames($path))
 			);
