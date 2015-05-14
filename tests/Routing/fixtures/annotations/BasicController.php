@@ -19,7 +19,7 @@ class BasicController {
 	/**
 	 * @return Response
 	 */
-	public function update($id) {}
+	public function update($id) {} 
 
 	/**
 	 * @Put("/more/{id}", after="log")
