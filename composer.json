@@ -15,9 +15,9 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "illuminate/console": "~5.1.*",
-        "illuminate/filesystem": "~5.1.*",
-        "illuminate/support": "~5.1.*",
+        "illuminate/console": "~5.1",
+        "illuminate/filesystem": "~5.1",
+        "illuminate/support": "~5.1",
         "doctrine/annotations": "~1.0",
         "symfony/console": "2.6.*",
         "symfony/finder": "2.6.*"
