@@ -3,6 +3,7 @@
     "description": "Route Annotations for The Laravel Framework.",
     "keywords": ["framework", "laravel", "annotations"],
     "license": "MIT",
+    "version": "5.1",
     "authors": [
         {
             "name": "Adam Engebretson",
