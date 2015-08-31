@@ -47,7 +47,7 @@ class Scanner extends AnnotationScanner {
 
             foreach ($annotations as $annotation)
             {
-                $output .= $this->buildBinding($annotation->binding, $class->name);
+                $output .= $this->buildBinding($annotation, $class->name);
             }
         }
 
@@ -69,13 +69,20 @@ class Scanner extends AnnotationScanner {
     /**
      * Build the event listener for the class and method.
      *
-     * @param  string $binding
+     * @param  Bind   $annotation
      * @param  string $class
      *
      * @return string
      */
-    protected function buildBinding($binding, $class)
+    protected function buildBinding($annotation, $class)
     {
-        return sprintf('$router->model(\'%s\', \'%s\');', $binding, $class) . PHP_EOL;
+        if ($annotation->binder === null) {
+            $method = 'model';
+            $binder = $class;
+        } else {
+            $method = 'bind';
+            $binder = $annotation->binder;
+        }
+        return sprintf('$router->%s(\'%s\', \'%s\');', $method, $annotation->binding, $binder) . PHP_EOL;
     }
 }
