@@ -76,8 +76,8 @@ class Resource extends Annotation
     protected function getEndpointsWithResourceMethods(EndpointCollection $endpoints)
     {
         return Collection::make($endpoints)->filter(function ($endpoint) {
-            return ($endpoint instanceof MethodEndpoint &&
-                    in_array($endpoint->method, $this->methods));
+            return $endpoint instanceof MethodEndpoint &&
+                    in_array($endpoint->method, $this->methods);
 
         })->all();
     }
