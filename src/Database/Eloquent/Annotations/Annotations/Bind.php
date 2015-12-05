@@ -1,10 +1,12 @@
-<?php namespace Collective\Annotations\Database\Eloquent\Annotations\Annotations;
+<?php
+
+namespace Collective\Annotations\Database\Eloquent\Annotations\Annotations;
 
 /**
  * @Annotation
  */
-class Bind {
-
+class Bind
+{
     /**
      * The binding the annotation binds the model to.
      *
@@ -15,12 +17,12 @@ class Bind {
     /**
      * Create a new annotation instance.
      *
-     * @param  array  $values
+     * @param array $values
+     *
      * @return void
      */
-    public function __construct(array $values = array())
+    public function __construct(array $values = [])
     {
         $this->binding = $values['value'];
     }
-
 }

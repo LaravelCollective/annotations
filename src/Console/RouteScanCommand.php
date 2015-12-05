@@ -1,13 +1,15 @@
-<?php namespace Collective\Annotations\Console;
+<?php
+
+namespace Collective\Annotations\Console;
 
 use Collective\Annotations\AnnotationsServiceProvider;
+use Illuminate\Console\AppNamespaceDetectorTrait;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\InputOption;
-use Illuminate\Console\AppNamespaceDetectorTrait;
 
-class RouteScanCommand extends Command {
-
+class RouteScanCommand extends Command
+{
     use AppNamespaceDetectorTrait;
 
     /**
@@ -41,8 +43,8 @@ class RouteScanCommand extends Command {
     /**
      * Create a new event scan command instance.
      *
-     * @param  \Illuminate\Filesystem\Filesystem $files
-     * @param AnnotationsServiceProvider         $provider
+     * @param \Illuminate\Filesystem\Filesystem $files
+     * @param AnnotationsServiceProvider        $provider
      */
     public function __construct(Filesystem $files, AnnotationsServiceProvider $provider)
     {
@@ -63,8 +65,7 @@ class RouteScanCommand extends Command {
 
         $this->info('Routes scanned!');
 
-        if ($this->option('list'))
-        {
+        if ($this->option('list')) {
             $this->call('route:list');
         }
     }
@@ -110,5 +111,4 @@ class RouteScanCommand extends Command {
           ['list', null, InputOption::VALUE_NONE, 'List all registered routes'],
         ];
     }
-
 }

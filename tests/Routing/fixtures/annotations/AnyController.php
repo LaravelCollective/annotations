@@ -1,9 +1,13 @@
-<?php namespace App\Http\Controllers;
+<?php
 
-class AnyController {
+namespace App\Http\Controllers;
 
-	/**
-	 * @Any("my-any-route")
-	 */
-	public function anyAnnotations(){ }
+class AnyController
+{
+    /**
+     * @Any("my-any-route")
+     */
+    public function anyAnnotations()
+    {
+    }
 }

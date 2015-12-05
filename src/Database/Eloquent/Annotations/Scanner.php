@@ -1,16 +1,18 @@
-<?php namespace Collective\Annotations\Database\Eloquent\Annotations;
+<?php
 
-use ReflectionClass;
+namespace Collective\Annotations\Database\Eloquent\Annotations;
+
 use Collective\Annotations\AnnotationScanner;
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use ReflectionClass;
 use Symfony\Component\Finder\Finder;
 
-class Scanner extends AnnotationScanner {
-
+class Scanner extends AnnotationScanner
+{
     /**
      * Create a new event scanner instance.
      *
-     * @param  array $scan
+     * @param array $scan
      *
      * @return void
      */
@@ -18,8 +20,7 @@ class Scanner extends AnnotationScanner {
     {
         $this->scan = $scan;
 
-        foreach (Finder::create()->files()->in(__DIR__ . '/Annotations') as $file)
-        {
+        foreach (Finder::create()->files()->in(__DIR__.'/Annotations') as $file) {
             AnnotationRegistry::registerFile($file->getRealPath());
         }
     }
@@ -27,8 +28,9 @@ class Scanner extends AnnotationScanner {
     /**
      * Convert the scanned annotations into route definitions.
      *
-     * @return string
      * @throws InvalidBindingResolverException
+     *
+     * @return string
      */
     public function getModelDefinitions()
     {
@@ -36,17 +38,14 @@ class Scanner extends AnnotationScanner {
 
         $reader = $this->getReader();
 
-        foreach ($this->getClassesToScan() as $class)
-        {
+        foreach ($this->getClassesToScan() as $class) {
             $annotations = $reader->getClassAnnotations($class);
 
-            if ( count($annotations) > 0 && ! $this->extendsEloquent($class))
-            {
-                throw new InvalidBindingResolverException('Class [' . $class->name . '] is not a subclass of [Illuminate\Database\Eloquent\Model].');
+            if (count($annotations) > 0 && !$this->extendsEloquent($class)) {
+                throw new InvalidBindingResolverException('Class ['.$class->name.'] is not a subclass of [Illuminate\Database\Eloquent\Model].');
             }
 
-            foreach ($annotations as $annotation)
-            {
+            foreach ($annotations as $annotation) {
                 $output .= $this->buildBinding($annotation->binding, $class->name);
             }
         }
@@ -55,7 +54,7 @@ class Scanner extends AnnotationScanner {
     }
 
     /**
-     * Determine if a class extends Eloquent
+     * Determine if a class extends Eloquent.
      *
      * @param ReflectionClass $class
      *
@@ -69,13 +68,13 @@ class Scanner extends AnnotationScanner {
     /**
      * Build the event listener for the class and method.
      *
-     * @param  string $binding
-     * @param  string $class
+     * @param string $binding
+     * @param string $class
      *
      * @return string
      */
     protected function buildBinding($binding, $class)
     {
-        return sprintf('$router->model(\'%s\', \'%s\');', $binding, $class) . PHP_EOL;
+        return sprintf('$router->model(\'%s\', \'%s\');', $binding, $class).PHP_EOL;
     }
 }

@@ -1,10 +1,11 @@
-<?php namespace Collective\Annotations\Routing\Annotations\Annotations;
+<?php
+
+namespace Collective\Annotations\Routing\Annotations\Annotations;
 
 /**
  * @Annotation
  */
-class Delete extends Route {
-
-	//
-
+class Delete extends Route
+{
+    //
 }

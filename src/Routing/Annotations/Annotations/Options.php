@@ -1,10 +1,11 @@
-<?php namespace Collective\Annotations\Routing\Annotations\Annotations;
+<?php
+
+namespace Collective\Annotations\Routing\Annotations\Annotations;
 
 /**
  * @Annotation
  */
-class Options extends Route {
-
-	//
-
+class Options extends Route
+{
+    //
 }
