@@ -1,10 +1,12 @@
-<?php namespace Collective\Annotations\Events\Annotations\Annotations;
+<?php
+
+namespace Collective\Annotations\Events\Annotations\Annotations;
 
 /**
  * @Annotation
  */
-class Hears {
-
+class Hears
+{
     /**
      * The events the annotation hears.
      *
@@ -15,7 +17,7 @@ class Hears {
     /**
      * Create a new annotation instance.
      *
-     * @param  array $values
+     * @param array $values
      *
      * @return void
      */

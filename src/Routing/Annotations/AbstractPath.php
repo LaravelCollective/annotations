@@ -1,40 +1,41 @@
-<?php namespace Collective\Annotations\Routing\Annotations;
+<?php
 
-abstract class AbstractPath {
+namespace Collective\Annotations\Routing\Annotations;
 
-	/**
-	 * The HTTP verb the route responds to.
-	 *
-	 * @var array
-	 */
-	public $verb;
+abstract class AbstractPath
+{
+    /**
+     * The HTTP verb the route responds to.
+     *
+     * @var array
+     */
+    public $verb;
 
-	/**
-	 * The domain the route responds to.
-	 *
-	 * @var string
-	 */
-	public $domain;
+    /**
+     * The domain the route responds to.
+     *
+     * @var string
+     */
+    public $domain;
 
-	/**
-	 * The path / URI the route responds to.
-	 *
-	 * @var string
-	 */
-	public $path;
+    /**
+     * The path / URI the route responds to.
+     *
+     * @var string
+     */
+    public $path;
 
-	/**
-	 * The path's middleware.
-	 *
-	 * @var array
-	 */
-	public $middleware = [];
+    /**
+     * The path's middleware.
+     *
+     * @var array
+     */
+    public $middleware = [];
 
-	/**
-	 * The path's "where" clauses.
-	 *
-	 * @var array
-	 */
-	public $where = [];
-
+    /**
+     * The path's "where" clauses.
+     *
+     * @var array
+     */
+    public $where = [];
 }

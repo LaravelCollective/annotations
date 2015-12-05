@@ -1,9 +1,11 @@
-<?php namespace Collective\Annotations;
+<?php
+
+namespace Collective\Annotations;
 
 use Illuminate\Contracts\Foundation\Application;
 
-class AnnotationFinder {
-
+class AnnotationFinder
+{
     /**
      * @var Application
      */
@@ -12,11 +14,10 @@ class AnnotationFinder {
     /**
      * @param Application $app
      */
-    function __construct(Application $app)
+    public function __construct(Application $app)
     {
         $this->app = $app;
     }
-
 
     /**
      * Determine if the application routes have been scanned.
@@ -35,7 +36,7 @@ class AnnotationFinder {
      */
     public function getScannedRoutesPath()
     {
-        return $this->app['path.storage'] . '/framework/routes.scanned.php';
+        return $this->app['path.storage'].'/framework/routes.scanned.php';
     }
 
     /**
@@ -55,7 +56,7 @@ class AnnotationFinder {
      */
     public function getScannedEventsPath()
     {
-        return $this->app['path.storage'] . '/framework/events.scanned.php';
+        return $this->app['path.storage'].'/framework/events.scanned.php';
     }
 
     /**
@@ -65,7 +66,7 @@ class AnnotationFinder {
      */
     public function modelsAreScanned()
     {
-      return $this->app['files']->exists($this->getScannedModelsPath());
+        return $this->app['files']->exists($this->getScannedModelsPath());
     }
 
     /**
@@ -75,6 +76,6 @@ class AnnotationFinder {
      */
     public function getScannedModelsPath()
     {
-      return $this->app['path.storage'] . '/framework/models.scanned.php';
+        return $this->app['path.storage'].'/framework/models.scanned.php';
     }
 }
