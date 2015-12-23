@@ -1,8 +1,12 @@
 {
     "name": "laravelcollective/annotations",
     "description": "Route Annotations for The Laravel Framework.",
-    "keywords": ["framework", "laravel", "annotations"],
     "license": "MIT",
+    "homepage": "http://laravelcollective.com",
+    "support": {
+        "issues": "https://github.com/LaravelCollective/annotations/issues",
+        "source": "https://github.com/LaravelCollective/annotations"
+    },
     "authors": [
         {
             "name": "Adam Engebretson",
