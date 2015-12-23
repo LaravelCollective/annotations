@@ -180,7 +180,7 @@ class AnnotationsServiceProvider extends ServiceProvider
      */
     protected function registerRouteScanner()
     {
-        $this->app->bindShared('annotations.route.scanner', function ($app) {
+        $this->app->singleton('annotations.route.scanner', function ($app) {
             $scanner = new RouteScanner([]);
 
             $scanner->addAnnotationNamespace(
@@ -199,7 +199,7 @@ class AnnotationsServiceProvider extends ServiceProvider
      */
     protected function registerEventScanner()
     {
-        $this->app->bindShared('annotations.event.scanner', function ($app) {
+        $this->app->singleton('annotations.event.scanner', function ($app) {
             $scanner = new EventScanner([]);
 
             $scanner->addAnnotationNamespace(
@@ -218,7 +218,7 @@ class AnnotationsServiceProvider extends ServiceProvider
      */
     protected function registerModelScanner()
     {
-        $this->app->bindShared('annotations.model.scanner', function ($app) {
+        $this->app->singleton('annotations.model.scanner', function ($app) {
             $scanner = new ModelScanner([]);
 
             $scanner->addAnnotationNamespace(
