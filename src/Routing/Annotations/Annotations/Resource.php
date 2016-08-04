@@ -78,7 +78,6 @@ class Resource extends Annotation
         return Collection::make($endpoints)->filter(function ($endpoint) {
             return $endpoint instanceof MethodEndpoint &&
                     in_array($endpoint->method, $this->methods);
-
         })->all();
     }
 }
