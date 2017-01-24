@@ -19,13 +19,13 @@
     ],
     "require": {
         "php": ">=5.6.4",
-        "illuminate/console": "5.3.*",
-        "illuminate/filesystem": "5.3.*",
-        "illuminate/support": "5.3.*",
+        "illuminate/console": "5.4.*",
+        "illuminate/filesystem": "5.4.*",
+        "illuminate/support": "5.4.*",
         "doctrine/annotations": "~1.0"
     },
     "require-dev": {
-        "illuminate/database": "5.3.*",
+        "illuminate/database": "5.4.*",
         "mockery/mockery": "~0.9.4",
         "phpunit/phpunit": "~5.4"
     },
@@ -33,5 +33,11 @@
         "psr-4": {
             "Collective\\Annotations\\": "src/"
         }
-    }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "5.4-dev"
+        }
+    },
+    "minimum-stability": "dev"
 }
