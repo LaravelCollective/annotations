@@ -3,14 +3,14 @@
 namespace Collective\Annotations\Console;
 
 use Collective\Annotations\AnnotationsServiceProvider;
-use Illuminate\Console\AppNamespaceDetectorTrait;
+use Illuminate\Console\DetectsApplicationNamespace;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\InputOption;
 
 class RouteScanCommand extends Command
 {
-    use AppNamespaceDetectorTrait;
+    use DetectsApplicationNamespace;
 
     /**
      * The console command name.
