@@ -43,7 +43,7 @@ class AnnotationsServiceProviderTest extends PHPUnit_Framework_TestCase
         $this->provider->appNamespace = 'App';
 
         $this->app->shouldReceive('make')
-            ->with('Illuminate\Filesystem\ClassFinder')->once()
+            ->with('Collective\Annotations\Filesystem\ClassFinder')->once()
             ->andReturn($classFinder = m::mock());
 
         $classFinder->shouldReceive('findClasses')
