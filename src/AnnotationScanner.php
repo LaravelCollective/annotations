@@ -4,7 +4,7 @@ namespace Collective\Annotations;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\SimpleAnnotationReader;
-use Exception;
+use ReflectionException;
 use ReflectionClass;
 use Symfony\Component\Finder\Finder;
 
@@ -62,7 +62,7 @@ abstract class AnnotationScanner
         foreach ($this->scan as $class) {
             try {
                 $classes[] = new ReflectionClass($class);
-            } catch (Exception $e) {
+            } catch (ReflectionException $e) {
                 //
             }
         }
