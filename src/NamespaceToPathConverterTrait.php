@@ -2,11 +2,11 @@
 
 namespace Collective\Annotations;
 
-use Illuminate\Console\AppNamespaceDetectorTrait;
+use Illuminate\Console\DetectsApplicationNamespace;
 
 trait NamespaceToPathConverterTrait
 {
-    use AppNamespaceDetectorTrait;
+    use DetectsApplicationNamespace;
 
     /**
      * Convert the given namespace to a file path.
