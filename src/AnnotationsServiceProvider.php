@@ -502,7 +502,7 @@ class AnnotationsServiceProvider extends ServiceProvider
     {
         $directory = ($base ?: $this->app->make('path')).'/'.$this->convertNamespaceToPath($namespace);
 
-        return $this->app->make('Illuminate\Filesystem\ClassFinder')->findClasses($directory);
+        return $this->app->make('Collective\Annotations\Filesystem\ClassFinder')->findClasses($directory);
     }
 
     /**
