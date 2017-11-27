@@ -99,7 +99,7 @@ class Scanner extends AnnotationScanner
                                    $method, array $annotations)
     {
         $endpoints->push($endpoint = new MethodEndpoint([
-            'reflection' => $class, 'method' => $method, 'uses' => $class->name.'@'.$method,
+            'reflection' => $class, 'method' => $method, 'uses' => '\\'.$class->name.'@'.$method,
         ]));
 
         foreach ($annotations as $annotation) {
