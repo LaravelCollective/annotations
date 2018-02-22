@@ -56,7 +56,7 @@ class ModelScanCommand extends Command
      *
      * @return void
      */
-    public function fire()
+    public function handle()
     {
         $this->files->put($this->getOutputPath(), $this->getRouteDefinitions());
 
