@@ -130,11 +130,15 @@ class ResourceEndpoint implements EndpointInterface
 
         foreach ($this->paths as $path) {
             $routes[] = sprintf(
-                $this->getTemplate(), 'Resource: '.$this->name.'@'.$path->method,
+                $this->getTemplate(),
+                'Resource: '.$this->name.'@'.$path->method,
                 $this->implodeArray($this->getMiddleware($path)),
-                var_export($path->path, true), $this->implodeArray($path->where),
-                var_export($path->domain, true), var_export($this->name, true),
-                var_export($this->reflection->name, true), $this->implodeArray([$path->method]),
+                var_export($path->path, true),
+                $this->implodeArray($path->where),
+                var_export($path->domain, true),
+                var_export($this->name, true),
+                var_export('\\' . $this->reflection->name, true),
+                $this->implodeArray([$path->method]),
                 $this->implodeArray($this->getNames($path))
             );
         }
@@ -217,7 +221,7 @@ class ResourceEndpoint implements EndpointInterface
         return '// %s
 $router->group([\'middleware\' => [%s], \'prefix\' => %s, \'where\' => [%s], \'domain\' => %s], function() use ($router)
 {
-	$router->resource(%s, %s, [\'only\' => [%s], \'names\' => [%s]]);
+    $router->resource(%s, %s, [\'only\' => [%s], \'names\' => [%s]]);
 });';
     }
 }
