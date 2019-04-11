@@ -25,8 +25,8 @@ class ClassFinderTest extends PHPUnit_Framework_TestCase
     {
         $classes = $this->finder->findClasses(__DIR__ . '/fixtures/finder');
         $this->assertEquals([
-            'App\Http\Controllers\AnyController',
             'App\Contracts\AnyInterface',
+            'App\Http\Controllers\AnyController',
         ], $classes);
     }
 }
