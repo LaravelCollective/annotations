@@ -24,7 +24,7 @@
 Begin by installing this package through Composer. Edit your project's `composer.json` file to require `laravelcollective/annotations`.
 
     "require": {
-        "laravelcollective/annotations": "5.6.\*"
+        "laravelcollective/annotations": "5.8.\*"
     }
 
 Next, update Composer from the Terminal:
@@ -374,7 +374,7 @@ public function routeScans() {
 <a name="models"></a>
 ## Model Annotations
 
-You can use annotations to automatically bind your models to route parameters, using [Route Model Binding](http://laravel.com/docs/5.0/routing#route-model-binding). To do this, use the `@Bind` annotation.
+You can use annotations to automatically bind your models to route parameters, using [Route Model Binding](http://laravel.com/docs/5.8/routing#route-model-binding). To do this, use the `@Bind` annotation.
 
 ```php
 /**
