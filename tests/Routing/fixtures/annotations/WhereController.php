@@ -11,4 +11,11 @@ class WhereController
     public function whereAnnotations()
     {
     }
+
+    /**
+     * @Get("/{key}", where={"key": "value"})
+     */
+    public function getWhereAnnotations()
+    {
+    }
 }
