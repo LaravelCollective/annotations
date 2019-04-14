@@ -11,12 +11,12 @@ interface EndpointInterface
      */
     public function toRouteDefinition();
 
-	/**
-	 * Get the detail about endpoint that helps to create route definition.
-	 *
-	 * @return array
-	 */
-	public function toRouteDefinitionDetail();
+    /**
+     * Get the detail about endpoint that helps to create route definition.
+     *
+     * @return array
+     */
+    public function toRouteDefinitionDetail();
 
     /**
      * Determine if the endpoint has any paths.
