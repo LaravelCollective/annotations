@@ -18,7 +18,7 @@ class Where extends Annotation
     public function modify(MethodEndpoint $endpoint, ReflectionMethod $method)
     {
         foreach ($endpoint->getPaths() as $path) {
-            $path->where = array_merge($path->where, (array) $this->value);
+            $path->where = array_merge($path->where, (array) $this->values);
         }
     }
 
