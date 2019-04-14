@@ -31,14 +31,14 @@ class RoutingAnnotationScannerTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(trim(file_get_contents(__DIR__.'/results/annotation-any.php')), $definition);
 	}
 
-	public function testAnyAnnotationDetail()
-	{
-		require_once __DIR__.'/fixtures/annotations/AnyController.php';
-		$scanner = $this->makeScanner(['App\Http\Controllers\AnyController']);
+    public function testAnyAnnotationDetail()
+    {
+        require_once __DIR__.'/fixtures/annotations/AnyController.php';
+        $scanner = $this->makeScanner(['App\Http\Controllers\AnyController']);
 
-		$routeDetail = $scanner->getRouteDefinitionsDetail();
-		$this->assertEquals(include __DIR__ . '/results/route-detail-any.php', $routeDetail);
-	}
+        $routeDetail = $scanner->getRouteDefinitionsDetail();
+        $this->assertEquals(include __DIR__ . '/results/route-detail-any.php', $routeDetail);
+    }
 
     /**
      * Construct a route annotation scanner.

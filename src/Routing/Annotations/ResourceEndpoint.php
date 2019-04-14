@@ -142,31 +142,31 @@ class ResourceEndpoint implements EndpointInterface
         return implode(PHP_EOL.PHP_EOL, $routes);
     }
 
-	/**
-	 * Get the detail about endpoint that helps to create route definition.
-	 *
-	 * @return array
-	 */
-	public function toRouteDefinitionDetail()
-	{
-		$routes = [];
+    /**
+     * Get the detail about endpoint that helps to create route definition.
+     *
+     * @return array
+     */
+    public function toRouteDefinitionDetail()
+    {
+        $routes = [];
 
-		foreach ($this->paths as $path) {
-			$routes[] = [
-				'label' => $this->name . '@' . $path->method,
-				'middleware' => $this->getMiddleware($path),
-				'prefix' => $path->path,
-				'where' => $path->where,
-				'domain' => $path->domain,
-				'name' => $this->name,
-				'resource' => $this->reflection->name,
-				'method' => $path->method,
-				'names' => $this->getNames($path)
-			];
-		}
+        foreach ($this->paths as $path) {
+            $routes[] = [
+                'label' => $this->name . '@' . $path->method,
+                'middleware' => $this->getMiddleware($path),
+                'prefix' => $path->path,
+                'where' => $path->where,
+                'domain' => $path->domain,
+                'name' => $this->name,
+                'resource' => $this->reflection->name,
+                'method' => $path->method,
+                'names' => $this->getNames($path)
+            ];
+        }
 
-		return $routes;
-	}
+        return $routes;
+    }
 
     /**
      * Get all of the middleware for the given path.

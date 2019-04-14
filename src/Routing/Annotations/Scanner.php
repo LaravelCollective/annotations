@@ -42,22 +42,23 @@ class Scanner extends AnnotationScanner
         return trim($output);
     }
 
-	/**
-	 * Give informations about the scanned annotations related to route definition.
-	 *
-	 * @return array
-	 */
-	public function getRouteDefinitionsDetail()
-	{
-		$paths = array();
-		foreach ($this->getEndpointsInClasses($this->getReader()) as $endpoint) {
-			/* @var \Collective\Annotations\Routing\Annotations\MethodEndpoint $endpoint */
-			foreach ($endpoint->toRouteDefinitionDetail() as $path) {
-				$paths[] = $path;
-			}
-		}
-		return $paths;
-	}
+    /**
+     * Give information about the scanned annotations related to route definition.
+     *
+     * @return array
+     */
+    public function getRouteDefinitionsDetail()
+    {
+        $paths = array();
+        foreach ($this->getEndpointsInClasses($this->getReader()) as $endpoint) {
+            /* @var \Collective\Annotations\Routing\Annotations\MethodEndpoint $endpoint */
+            foreach ($endpoint->toRouteDefinitionDetail() as $path) {
+                $paths[] = $path;
+            }
+        }
+
+        return $paths;
+    }
 
     /**
      * Scan the directory and generate the route manifest.
