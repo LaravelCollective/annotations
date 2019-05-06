@@ -84,6 +84,30 @@ class MethodEndpoint implements EndpointInterface
     }
 
     /**
+     * Get the detail about endpoint that helps to create route definition.
+     *
+     * @return array
+     */
+	public function toRouteDefinitionDetail()
+    {
+        $routes = [];
+
+        foreach ($this->paths as $path) {
+            $routes[] = [
+                'verb' => $path->verb,
+                'path' => $path->path,
+                'uses' => $this->uses,
+                'as' => $path->as,
+                'middleware' => array_merge($this->getClassMiddlewareForPath($path)->all(), $path->middleware, $this->middleware),
+                'where' => $path->where,
+                'domain' => $path->domain,
+            ];
+        }
+
+        return $routes;
+    }
+
+    /**
      * Get the middleware for the path.
      *
      * @param \Collective\Annotations\Routing\Annotations\AbstractPath $path
