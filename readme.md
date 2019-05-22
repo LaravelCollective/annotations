@@ -97,6 +97,8 @@ Finally, add your new provider to the `providers` array of `config/app.php`:
   ];
 ```
 
+This doesn't replace the `RouteServiceProvider`, this is still required as this handles loading of the route cache etc.
+
 <a name="scanning"></a>
 ## Setting up Scanning
 
