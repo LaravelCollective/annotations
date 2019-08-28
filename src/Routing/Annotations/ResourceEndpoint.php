@@ -190,7 +190,7 @@ class ResourceEndpoint implements EndpointInterface
      *
      * @param ResourcePath $path
      *
-     * @return array
+     * @return Collection
      */
     protected function getClassMiddlewareForPath(ResourcePath $path)
     {

@@ -19,7 +19,7 @@ class Scanner extends AnnotationScanner
      */
     public function __construct(array $scan)
     {
-        $this->scan = $scan;
+        parent::__construct($scan);
 
         foreach (Finder::create()->files()->in(__DIR__.'/Annotations') as $file) {
             AnnotationRegistry::registerFile($file->getRealPath());

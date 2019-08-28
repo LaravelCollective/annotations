@@ -345,7 +345,7 @@ class AnnotationsServiceProvider extends ServiceProvider
         $scanner->setClassesToScan($scans);
 
         file_put_contents(
-          $this->finder->getScannedRoutesPath(), '<?php '.$scanner->getRouteDefinitions()
+            $this->finder->getScannedRoutesPath(), '<?php '.$scanner->getRouteDefinitions()
         );
     }
 
