@@ -1,17 +1,28 @@
 <?php
 
 use Collective\Annotations\AnnotationsServiceProvider;
+use PHPUnit\Framework\TestCase;
 use Mockery as m;
 
-class AnnotationsServiceProviderTest extends PHPUnit_Framework_TestCase
+class AnnotationsServiceProviderTest extends TestCase
 {
-    public function setUp()
+    /**
+     * @var m\LegacyMockInterface|m\MockInterface|Illuminate\Contracts\Foundation\Application
+     */
+    protected $app;
+
+    /**
+     * @var AnnotationsServiceProvider
+     */
+    protected $provider;
+
+    public function setUp(): void
     {
         $this->app = m::mock('Illuminate\Contracts\Foundation\Application');
         $this->provider = new AnnotationsServiceProvider($this->app);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         m::close();
     }

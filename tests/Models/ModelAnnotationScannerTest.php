@@ -1,8 +1,9 @@
 <?php
 
 use Collective\Annotations\Database\Eloquent\Annotations\Scanner;
+use PHPUnit\Framework\TestCase;
 
-class ModelAnnotationScannerTest extends PHPUnit_Framework_TestCase
+class ModelAnnotationScannerTest extends TestCase
 {
     public function testProperRouteDefinitionsAreGenerated()
     {
