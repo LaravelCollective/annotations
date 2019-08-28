@@ -20,6 +20,7 @@ class ClassFinder
         }
         return array_filter($classes);
     }
+
     /**
      * Extract the class name from the file at the given path.
      *
@@ -38,6 +39,7 @@ class ClassFinder
             }
         }
     }
+
     /**
      * Find the namespace in the tokens starting at a given key.
      *
@@ -57,6 +59,7 @@ class ClassFinder
             }
         }
     }
+
     /**
      * Find the class in the tokens starting at a given key.
      *
@@ -76,6 +79,7 @@ class ClassFinder
             }
         }
     }
+
     /**
      * Determine if the given token is a namespace keyword.
      *
@@ -86,6 +90,7 @@ class ClassFinder
     {
         return is_array($token) && $token[0] == T_NAMESPACE;
     }
+
     /**
      * Determine if the given token is a class or interface keyword.
      *
@@ -96,6 +101,7 @@ class ClassFinder
     {
         return is_array($token) && ($token[0] == T_CLASS || $token[0] == T_INTERFACE);
     }
+
     /**
      * Determine if the given token is part of the namespace.
      *
@@ -106,6 +112,7 @@ class ClassFinder
     {
         return is_array($token) && ($token[0] == T_STRING || $token[0] == T_NS_SEPARATOR);
     }
+
     /**
      * Determine if the given token is part of the class.
      *
@@ -116,6 +123,7 @@ class ClassFinder
     {
         return is_array($token) && $token[0] == T_STRING;
     }
+
     /**
      * Determine if the given token is whitespace.
      *

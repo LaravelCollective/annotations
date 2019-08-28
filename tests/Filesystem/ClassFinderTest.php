@@ -1,10 +1,16 @@
 <?php
 
 use Collective\Annotations\Filesystem\ClassFinder;
+use PHPUnit\Framework\TestCase;
 
-class ClassFinderTest extends PHPUnit_Framework_TestCase
+class ClassFinderTest extends TestCase
 {
-    public function setUp()
+    /**
+     * @var ClassFinder
+     */
+    protected $finder;
+
+    public function setUp(): void
     {
         $this->finder = new ClassFinder();
     }

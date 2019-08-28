@@ -1,8 +1,9 @@
 <?php
 
 use Collective\Annotations\Routing\Annotations\Scanner;
+use PHPUnit\Framework\TestCase;
 
-class RoutingAnnotationScannerTest extends PHPUnit_Framework_TestCase
+class RoutingAnnotationScannerTest extends TestCase
 {
 	public function testProperRouteDefinitionsAreGenerated()
 	{

@@ -15,7 +15,7 @@ abstract class AnnotationScanner
     /**
      * Namespaces to check for annotation reader annotation classes.
      *
-     * @var string
+     * @var array
      */
     protected $namespaces = [];
 

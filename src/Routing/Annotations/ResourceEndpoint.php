@@ -2,6 +2,7 @@
 
 namespace Collective\Annotations\Routing\Annotations;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
 class ResourceEndpoint implements EndpointInterface
@@ -181,7 +182,7 @@ class ResourceEndpoint implements EndpointInterface
     {
         $classMiddleware = $this->getClassMiddlewareForPath($path)->all();
 
-        return array_merge($classMiddleware, array_get($this->middleware, $path->method, []));
+        return array_merge($classMiddleware, Arr::get($this->middleware, $path->method, []));
     }
 
     /**
@@ -189,7 +190,7 @@ class ResourceEndpoint implements EndpointInterface
      *
      * @param ResourcePath $path
      *
-     * @return array
+     * @return Collection
      */
     protected function getClassMiddlewareForPath(ResourcePath $path)
     {
