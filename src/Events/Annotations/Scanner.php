@@ -25,7 +25,7 @@ class Scanner extends AnnotationScanner
     }
 
     /**
-     * Convert the scanned annotations into route definitions.
+     * Convert the scanned annotations into event definitions.
      *
      * @return string
      */
