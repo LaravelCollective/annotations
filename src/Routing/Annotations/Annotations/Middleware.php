@@ -33,6 +33,16 @@ class Middleware extends Annotation
     {
         foreach ($endpoints as $endpoint) {
             foreach ((array) $this->value as $middleware) {
+                if($multipleMiddlewares = explode(',', $middleware)){
+                    $middleware = '';
+                    $nbMiddlewares = count($multipleMiddlewares)-1;
+
+                    for($i=0; $i<=$nbMiddlewares; ++$i) {
+                        $middleware .= $i > 0 ? "'" : '';
+                        $middleware .= str_replace(' ', '', $multipleMiddlewares[$i]);
+                        $middleware .= $i < $nbMiddlewares  ? "', " : '';
+                    }
+                }
                 $endpoint->classMiddleware[] = [
                     'name' => $middleware, 'only' => (array) $this->only, 'except' => (array) $this->except,
                 ];
