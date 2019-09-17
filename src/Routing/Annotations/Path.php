@@ -10,6 +10,7 @@ class Path extends AbstractPath
      * @var string
      */
     public $as;
+    public $no_prefix;
 
     /**
      * Create a new Route Path instance.
@@ -23,7 +24,7 @@ class Path extends AbstractPath
      *
      * @return void
      */
-    public function __construct($verb, $domain, $path, $as, $middleware = [], $where = [])
+    public function __construct($verb, $domain, $path, $as, $middleware = [], $where = [], $no_prefix=false)
     {
         $this->as = $as;
         $this->verb = $verb;
@@ -31,5 +32,6 @@ class Path extends AbstractPath
         $this->domain = $domain;
         $this->middleware = $middleware;
         $this->path = $path == '/' ? '/' : trim($path, '/');
+        $this->no_prefix = $no_prefix;
     }
 }
