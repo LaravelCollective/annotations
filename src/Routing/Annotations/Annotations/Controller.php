@@ -34,7 +34,9 @@ class Controller extends Annotation
     protected function prefixEndpoints(EndpointCollection $endpoints)
     {
         foreach ($endpoints->getAllPaths() as $path) {
-            $path->path = $this->trimPath($this->prefix, $path->path);
+            if (!$path->no_prefix) {
+                $path->path = $this->trimPath($this->prefix, $path->path);
+            }
         }
     }
 
