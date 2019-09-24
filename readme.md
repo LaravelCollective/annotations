@@ -225,9 +225,10 @@ Here's an example that uses all of the available parameters for a `@Get` annotat
 
 ```php
   /**
-   * @Get("/profiles/{id}", as="profiles.show", middleware="guest", domain="foo.com", where={"id": "[0-9]+"})
+   * @Get("/profiles/{id}", as="profiles.show", middleware="guest", domain="foo.com", where={"id": "[0-9]+"}, no_prefix="true")
    */
 ```
+`no_prefix` allows any prefix added to the routes in that controller be ignored for this particular route.
 
 ### @Post, @Options, @Put, @Patch, @Delete, @any
 
@@ -254,7 +255,7 @@ Or on a whole controller, with the same only/exclude filter syntax that you can 
 
 ```php
 /**
- * @Middleware("guest", except={"logout"})
+ * @Middleware("guest", except={"logout"}, prefix="/your/prefix")
  */
 class AuthController extends Controller {
 

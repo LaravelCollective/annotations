@@ -10,6 +10,12 @@ class Path extends AbstractPath
      * @var string
      */
     public $as;
+
+    /**
+     * Should the prefix added to the controller be ignored for this particular route
+     *
+     * @var bool
+     */
     public $no_prefix;
 
     /**
@@ -24,7 +30,7 @@ class Path extends AbstractPath
      *
      * @return void
      */
-    public function __construct($verb, $domain, $path, $as, $middleware = [], $where = [], $no_prefix=false)
+    public function __construct($verb, $domain, $path, $as, $middleware = [], $where = [], $no_prefix = false)
     {
         $this->as = $as;
         $this->verb = $verb;

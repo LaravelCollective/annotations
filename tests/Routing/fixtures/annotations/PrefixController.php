@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 /**
  * @Controller(prefix="/any-prefix")
  */
-
-
 class PrefixController
 {
     /**
