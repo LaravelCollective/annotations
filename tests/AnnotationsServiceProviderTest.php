@@ -6,8 +6,10 @@ use Mockery as m;
 
 class AnnotationsServiceProviderTest extends TestCase
 {
+    use m\Adapter\Phpunit\MockeryPHPUnitIntegration;
+
     /**
-     * @var m\LegacyMockInterface|m\MockInterface|Illuminate\Contracts\Foundation\Application
+     * @var m\MockInterface|Illuminate\Contracts\Foundation\Application
      */
     protected $app;
 
@@ -20,11 +22,6 @@ class AnnotationsServiceProviderTest extends TestCase
     {
         $this->app = m::mock('Illuminate\Contracts\Foundation\Application');
         $this->provider = new AnnotationsServiceProvider($this->app);
-    }
-
-    public function tearDown(): void
-    {
-        m::close();
     }
 
     public function testConvertNamespaceToPath()

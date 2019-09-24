@@ -6,19 +6,16 @@ use Mockery as m;
 
 class AnnotationFinderTest extends TestCase
 {
+    use m\Adapter\Phpunit\MockeryPHPUnitIntegration;
+
     /**
-     * @var m\LegacyMockInterface|m\MockInterface|Illuminate\Contracts\Foundation\Application
+     * @var m\MockInterface|Illuminate\Contracts\Foundation\Application
      */
     protected $app;
 
     public function setUp(): void
     {
         $this->app = m::mock('Illuminate\Contracts\Foundation\Application');
-    }
-
-    public function tearDown(): void
-    {
-        m::close();
     }
 
     /**
