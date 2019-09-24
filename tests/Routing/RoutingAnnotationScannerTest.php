@@ -22,6 +22,15 @@ class RoutingAnnotationScannerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(trim(file_get_contents(__DIR__.'/results/annotation-any.php')), $definition);
     }
 
+    public function testPrefixAnnotation()
+    {
+        require_once __DIR__.'/fixtures/annotations/PrefixController.php';
+        $scanner = $this->makeScanner(['App\Http\Controllers\PrefixController']);
+
+        $definition = str_replace(PHP_EOL, "\n", $scanner->getRouteDefinitions());
+        $this->assertEquals(trim(file_get_contents(__DIR__.'/results/annotation-prefix.php')), $definition);
+    }
+
     /**
      * Construct a route annotation scanner.
      *
