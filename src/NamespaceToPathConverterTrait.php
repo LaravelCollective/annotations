@@ -3,6 +3,7 @@
 namespace Collective\Annotations;
 
 use Illuminate\Console\DetectsApplicationNamespace;
+use Illuminate\Support\Facades\App;
 
 trait NamespaceToPathConverterTrait
 {
@@ -27,6 +28,6 @@ trait NamespaceToPathConverterTrait
         $path = str_replace('\\', '/', trim($namespace, ' \\'));
 
         // trim and return the path
-        return ($base ?: app_path()).'/'.$path;
+        return ($base ?: App::make('path')).'/'.$path;
     }
 }
