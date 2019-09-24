@@ -17,7 +17,7 @@ class AnnotationScannerTest extends TestCase
      */
     protected $app;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->app = m::mock('Illuminate\Contracts\Foundation\Application');
     }
