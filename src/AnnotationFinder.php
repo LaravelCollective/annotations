@@ -26,7 +26,7 @@ class AnnotationFinder
      */
     public function routesAreScanned()
     {
-        return $this->app['files']->exists($this->getScannedRoutesPath());
+        return $this->app->make('files')->exists($this->getScannedRoutesPath());
     }
 
     /**
@@ -36,7 +36,7 @@ class AnnotationFinder
      */
     public function getScannedRoutesPath()
     {
-        return $this->app['path.storage'].'/framework/routes.scanned.php';
+        return $this->app->make('path.storage').'/framework/routes.scanned.php';
     }
 
     /**
@@ -46,7 +46,7 @@ class AnnotationFinder
      */
     public function eventsAreScanned()
     {
-        return $this->app['files']->exists($this->getScannedEventsPath());
+        return $this->app->make('files')->exists($this->getScannedEventsPath());
     }
 
     /**
@@ -56,7 +56,7 @@ class AnnotationFinder
      */
     public function getScannedEventsPath()
     {
-        return $this->app['path.storage'].'/framework/events.scanned.php';
+        return $this->app->make('path.storage').'/framework/events.scanned.php';
     }
 
     /**
@@ -66,7 +66,7 @@ class AnnotationFinder
      */
     public function modelsAreScanned()
     {
-        return $this->app['files']->exists($this->getScannedModelsPath());
+        return $this->app->make('files')->exists($this->getScannedModelsPath());
     }
 
     /**
@@ -76,6 +76,6 @@ class AnnotationFinder
      */
     public function getScannedModelsPath()
     {
-        return $this->app['path.storage'].'/framework/models.scanned.php';
+        return $this->app->make('path.storage').'/framework/models.scanned.php';
     }
 }
