@@ -23,22 +23,28 @@ class AnnotationScannerTest extends TestCase
     }
 
     /**
+     * Test that the scanner finds the events annotations directory as expected
+     * Ensure that the Hears class is loaded into the scanner
+     *
      * @covers \Collective\Annotations\AnnotationScanner::addAnnotationNamespace
      * @covers \Collective\Annotations\AnnotationScanner::registerAnnotationsPathWithRegistry
      * @covers \Collective\Annotations\NamespaceToPathConverterTrait::getPathFromNamespace
      */
     public function testAddAnnotationNamespaceWithoutSpecifiedPath()
     {
+        //update the app namespace to be App
         $this->app->shouldReceive('getNamespace')->once()
             ->andReturn('App\\');
         Container::setInstance($this->app);
 
+        //update the app path in the facade to use `src` which is where the event scanner lives in this project
         App::shouldReceive('make')
             ->with('path')->once()
             ->andReturn('src');
 
         $scanner = new Scanner(['App\Handlers\Events\BasicEventHandler']);
 
+        //underneath the scanner converts the App namespace to the src dir, based on what we set into the app above
         $return = $scanner->addAnnotationNamespace(
             'App\Events\Annotations\Annotations'
         );
@@ -49,6 +55,10 @@ class AnnotationScannerTest extends TestCase
         );
     }
 
+    /**
+     * Ensures that the class that doesn't exist is ignored by the scanner
+     * And that the existing class is loaded in as expected
+     */
     public function testSetClassesToScan()
     {
         require_once __DIR__.'/Events/fixtures/annotations/BasicEventHandler.php';

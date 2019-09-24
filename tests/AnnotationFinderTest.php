@@ -30,13 +30,14 @@ class AnnotationFinderTest extends TestCase
      */
     public function testRoutesAreScannedReturnsTrue($filepath, $found, $method, $expected)
     {
-        $this->app->shouldReceive('make')
-            ->with('files')->once()
-            ->andReturn($files = m::mock('Illuminate\Filesystem\Filesystem'));
-
+        $files = m::mock('Illuminate\Filesystem\Filesystem');
         $files->shouldReceive('exists')
             ->with($filepath)->once()
             ->andReturn($found);
+
+        $this->app->shouldReceive('make')
+            ->with('files')->once()
+            ->andReturn($files);
 
         $this->app->shouldReceive('make')
             ->with('path.storage')->once()
