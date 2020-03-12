@@ -2,6 +2,7 @@
 
 namespace Collective\Annotations;
 
+use Illuminate\Container\Container;
 use Illuminate\Support\Facades\App;
 
 trait NamespaceToPathConverterTrait
@@ -16,7 +17,7 @@ trait NamespaceToPathConverterTrait
      */
     public function getPathFromNamespace($namespace, $base = null)
     {
-        $appNamespace = app()->getNamespace();
+        $appNamespace = Container::getInstance()->getNamespace();
 
         // remove the app namespace from the namespace if it is there
         if (substr($namespace, 0, strlen($appNamespace)) == $appNamespace) {

@@ -9,6 +9,7 @@ use Collective\Annotations\Database\Eloquent\Annotations\Scanner as ModelScanner
 use Collective\Annotations\Events\Annotations\Scanner as EventScanner;
 use Collective\Annotations\Routing\Annotations\Scanner as RouteScanner;
 use Illuminate\Console\DetectsApplicationNamespace;
+use Illuminate\Container\Container;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 
@@ -512,6 +513,6 @@ class AnnotationsServiceProvider extends ServiceProvider
      */
     protected function getAllClasses()
     {
-        return $this->getClassesFromNamespace(app()->getNamespace());
+        return $this->getClassesFromNamespace(Container::getInstance()->getNamespace());
     }
 }
