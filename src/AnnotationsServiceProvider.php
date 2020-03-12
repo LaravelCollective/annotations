@@ -14,7 +14,7 @@ use Illuminate\Support\ServiceProvider;
 
 class AnnotationsServiceProvider extends ServiceProvider
 {
-    use DetectsApplicationNamespace;
+    // use DetectsApplicationNamespace;
 
     /**
      * The commands to be registered.
@@ -448,7 +448,7 @@ class AnnotationsServiceProvider extends ServiceProvider
         if ($this->scanControllers) {
             $classes = array_merge(
               $classes,
-              $this->getClassesFromNamespace($this->getAppNamespace().'Http\\Controllers')
+              $this->getClassesFromNamespace($this->getNamespace().'Http\\Controllers')
             );
         }
 
@@ -479,7 +479,7 @@ class AnnotationsServiceProvider extends ServiceProvider
     public function convertNamespaceToPath($namespace)
     {
         // remove the app namespace from the namespace if it is there
-        $appNamespace = $this->getAppNamespace();
+        $appNamespace = $this->getNamespace();
 
         if (substr($namespace, 0, strlen($appNamespace)) == $appNamespace) {
             $namespace = substr($namespace, strlen($appNamespace));
@@ -512,6 +512,6 @@ class AnnotationsServiceProvider extends ServiceProvider
      */
     protected function getAllClasses()
     {
-        return $this->getClassesFromNamespace($this->getAppNamespace());
+        return $this->getClassesFromNamespace(app()->getNamespace());
     }
 }
