@@ -27,7 +27,7 @@
     "require-dev": {
         "illuminate/database": "^7.0",
         "mockery/mockery": "^1.0",
-        "phpunit/phpunit": "^8.0"
+        "phpunit/phpunit": "^8.5"
     },
     "autoload": {
         "psr-4": {
@@ -36,7 +36,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "6.0-dev"
+            "dev-master": "7.0-dev"
         }
     },
     "minimum-stability": "dev"

@@ -1,6 +1,7 @@
 <?php
 
 use Collective\Annotations\AnnotationsServiceProvider;
+use Illuminate\Container\Container;
 use PHPUnit\Framework\TestCase;
 use Mockery as m;
 
@@ -36,8 +37,11 @@ class AnnotationsServiceProviderTest extends TestCase
 
     public function testConvertNamespaceToPathWithoutRootNamespace()
     {
+        $this->app->shouldReceive('getNamespace')->once()
+            ->andReturn('Foo\\');
+        Container::setInstance($this->app);
+
         $this->provider = new AnnotationsServiceProviderAppNamespaceStub($this->app);
-        $this->provider->appNamespace = 'Foo';
         $class = 'App\\Foo';
 
         $result = $this->provider->convertNamespaceToPath($class);
@@ -47,8 +51,10 @@ class AnnotationsServiceProviderTest extends TestCase
 
     public function testGetClassesFromNamespace()
     {
+        $this->app->shouldReceive('getNamespace')->once()
+            ->andReturn('App\\');
         $this->provider = new AnnotationsServiceProviderAppNamespaceStub($this->app);
-        $this->provider->appNamespace = 'App';
+        Container::setInstance($this->app);
 
         $this->app->shouldReceive('make')
             ->with('Collective\Annotations\Filesystem\ClassFinder')->once()
