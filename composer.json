@@ -18,14 +18,14 @@
         }
     ],
     "require": {
-        "php": "^7.2",
-        "illuminate/console": "^7.0",
-        "illuminate/filesystem": "^7.0",
-        "illuminate/support": "^7.0",
+        "php": "^7.3",
+        "illuminate/console": "^8.0",
+        "illuminate/filesystem": "^8.0",
+        "illuminate/support": "^8.0",
         "doctrine/annotations": "~1.0"
     },
     "require-dev": {
-        "illuminate/database": "^7.0",
+        "illuminate/database": "^8.0",
         "mockery/mockery": "^1.0",
         "phpunit/phpunit": "^8.5"
     },
@@ -36,7 +36,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "7.0-dev"
+            "dev-master": "8.0-dev"
         }
     },
     "minimum-stability": "dev"
