@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-class AnyController
+class AnyController extends BasicController
 {
     /**
      * @Any("my-any-route")
