@@ -77,6 +77,8 @@ class Scanner extends AnnotationScanner
             ));
         }
 
+        $endpoints = $endpoints->unique();
+
         return $endpoints;
     }
 
