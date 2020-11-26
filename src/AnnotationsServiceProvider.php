@@ -440,7 +440,7 @@ class AnnotationsServiceProvider extends ServiceProvider
             return $this->getAllClasses();
         }
 
-        $classes = $this->scanRoutes;
+        $classes = array_unique($this->scanRoutes);
 
         // scan the controllers namespace if the flag is set
         if ($this->scanControllers) {
