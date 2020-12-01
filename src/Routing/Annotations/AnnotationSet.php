@@ -48,10 +48,12 @@ class AnnotationSet
         $annotations = [];
 
         foreach ($class->getMethods() as $method) {
-            $results = $reader->getMethodAnnotations($method);
+            if ($method->class == $class->name) {
+                $results = $reader->getMethodAnnotations($method);
 
-            if (count($results) > 0) {
-                $annotations[$method->name] = $results;
+                if (count($results) > 0) {
+                    $annotations[$method->name] = $results;
+                }
             }
         }
 
