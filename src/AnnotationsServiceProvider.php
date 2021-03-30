@@ -8,12 +8,13 @@ use Collective\Annotations\Console\RouteScanCommand;
 use Collective\Annotations\Database\Eloquent\Annotations\Scanner as ModelScanner;
 use Collective\Annotations\Events\Annotations\Scanner as EventScanner;
 use Collective\Annotations\Routing\Annotations\Scanner as RouteScanner;
-use Illuminate\Container\Container;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 
 class AnnotationsServiceProvider extends ServiceProvider
 {
+    use DetectsApplicationNamespace;
+
     /**
      * The commands to be registered.
      *
@@ -446,7 +447,7 @@ class AnnotationsServiceProvider extends ServiceProvider
         if ($this->scanControllers) {
             $classes = array_merge(
               $classes,
-              $this->getClassesFromNamespace(Container::getInstance()->getNamespace().'Http\\Controllers')
+              $this->getClassesFromNamespace($this->getAppNamespace().'Http\\Controllers')
             );
         }
 
@@ -477,7 +478,7 @@ class AnnotationsServiceProvider extends ServiceProvider
     public function convertNamespaceToPath($namespace)
     {
         // remove the app namespace from the namespace if it is there
-        $appNamespace = Container::getInstance()->getNamespace();
+        $appNamespace = $this->getAppNamespace();
 
         if (substr($namespace, 0, strlen($appNamespace)) == $appNamespace) {
             $namespace = substr($namespace, strlen($appNamespace));
@@ -510,6 +511,6 @@ class AnnotationsServiceProvider extends ServiceProvider
      */
     protected function getAllClasses()
     {
-        return $this->getClassesFromNamespace(Container::getInstance()->getNamespace());
+        return $this->getClassesFromNamespace($this->getAppNamespace());
     }
 }

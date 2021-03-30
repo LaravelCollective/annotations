@@ -110,7 +110,13 @@ class ClassFinder
      */
     protected function isPartOfNamespace($token)
     {
-        return is_array($token) && ($token[0] == T_STRING || $token[0] == T_NS_SEPARATOR);
+        /**
+         * T_NAME_QUALIFIED >= PHP 8.0
+         * T_NS_SEPARATOR   <= PHP 8.0
+         */
+        $compare = (defined('T_NAME_QUALIFIED') ? T_NAME_QUALIFIED : T_NS_SEPARATOR);
+
+        return is_array($token) && ($token[0] == T_STRING || $token[0] == $compare);
     }
 
     /**

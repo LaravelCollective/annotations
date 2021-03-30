@@ -3,13 +3,15 @@
 namespace Collective\Annotations\Console;
 
 use Collective\Annotations\AnnotationsServiceProvider;
+use Collective\Annotations\DetectsApplicationNamespace;
 use Illuminate\Console\Command;
-use Illuminate\Container\Container;
 use Illuminate\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\InputOption;
 
 class RouteScanCommand extends Command
 {
+    use DetectsApplicationNamespace;
+
     /**
      * The console command name.
      *
@@ -99,7 +101,7 @@ class RouteScanCommand extends Command
      */
     protected function getOptions()
     {
-        $namespace = Container::getInstance()->getNamespace().'Http\Controllers';
+        $namespace = $this->getAppNamespace().'Http\Controllers';
 
         return [
           ['namespace', null, InputOption::VALUE_OPTIONAL, 'The root namespace for the controllers.', $namespace],

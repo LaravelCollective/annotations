@@ -2,11 +2,11 @@
 
 namespace Collective\Annotations;
 
-use Illuminate\Container\Container;
 use Illuminate\Support\Facades\App;
 
 trait NamespaceToPathConverterTrait
 {
+    use DetectsApplicationNamespace;
 
     /**
      * Convert the given namespace to a file path.
@@ -17,7 +17,7 @@ trait NamespaceToPathConverterTrait
      */
     public function getPathFromNamespace($namespace, $base = null)
     {
-        $appNamespace = Container::getInstance()->getNamespace();
+        $appNamespace = $this->getAppNamespace();
 
         // remove the app namespace from the namespace if it is there
         if (substr($namespace, 0, strlen($appNamespace)) == $appNamespace) {
