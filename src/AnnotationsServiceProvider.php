@@ -292,7 +292,7 @@ class AnnotationsServiceProvider extends ServiceProvider
         $scanner->setClassesToScan($scans);
 
         file_put_contents(
-          $this->finder->getScannedEventsPath(), '<?php '.$scanner->getEventDefinitions()
+          $this->finder->getScannedEventsPath(), '<?php '.PHP_EOL.PHP_EOL.$scanner->getEventDefinitions().PHP_EOL
         );
     }
 
@@ -344,7 +344,7 @@ class AnnotationsServiceProvider extends ServiceProvider
         $scanner->setClassesToScan($scans);
 
         file_put_contents(
-            $this->finder->getScannedRoutesPath(), '<?php '.$scanner->getRouteDefinitions()
+            $this->finder->getScannedRoutesPath(), '<?php '.PHP_EOL.PHP_EOL.$scanner->getRouteDefinitions().PHP_EOL
         );
     }
 
@@ -398,7 +398,7 @@ class AnnotationsServiceProvider extends ServiceProvider
         $scanner->setClassesToScan($scans);
 
         file_put_contents(
-          $this->finder->getScannedModelsPath(), '<?php '.$scanner->getModelDefinitions()
+          $this->finder->getScannedModelsPath(), '<?php '.PHP_EOL.PHP_EOL.$scanner->getModelDefinitions().PHP_EOL
         );
     }
 
@@ -441,7 +441,7 @@ class AnnotationsServiceProvider extends ServiceProvider
             return $this->getAllClasses();
         }
 
-        $classes = $this->scanRoutes;
+        $classes = array_unique($this->scanRoutes);
 
         // scan the controllers namespace if the flag is set
         if ($this->scanControllers) {

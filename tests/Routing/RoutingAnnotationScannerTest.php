@@ -68,6 +68,19 @@ class RoutingAnnotationScannerTest extends TestCase
         $this->assertEquals(trim(file_get_contents(__DIR__.'/results/annotation-prefix.php')), $definition);
     }
 
+    public function testInheritedControllerAnnotations()
+    {
+        require_once __DIR__.'/fixtures/annotations/AnyController.php';
+        require_once __DIR__.'/fixtures/annotations/ChildController.php';
+        $scanner = $this->makeScanner([
+            'App\Http\Controllers\AnyController',
+            'App\Http\Controllers\ChildController'
+        ]);
+
+        $definition = str_replace(PHP_EOL, "\n", $scanner->getRouteDefinitions());
+        $this->assertEquals(trim(file_get_contents(__DIR__.'/results/annotation-child.php')), $definition);
+    }
+
     /**
      * Construct a route annotation scanner.
      *
