@@ -3,7 +3,7 @@
 namespace Collective\Annotations\Console;
 
 use Collective\Annotations\AnnotationsServiceProvider;
-use Illuminate\Console\DetectsApplicationNamespace;
+use Collective\Annotations\DetectsApplicationNamespace;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\InputOption;

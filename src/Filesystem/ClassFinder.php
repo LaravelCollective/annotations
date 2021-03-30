@@ -110,7 +110,7 @@ class ClassFinder
      */
     protected function isPartOfNamespace($token)
     {
-        return is_array($token) && ($token[0] == T_STRING || $token[0] == T_NS_SEPARATOR);
+        return is_array($token) && ($token[0] == T_STRING || $token[0] == T_NAME_QUALIFIED);
     }
 
     /**

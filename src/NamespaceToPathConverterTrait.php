@@ -2,7 +2,6 @@
 
 namespace Collective\Annotations;
 
-use Illuminate\Console\DetectsApplicationNamespace;
 use Illuminate\Support\Facades\App;
 
 trait NamespaceToPathConverterTrait

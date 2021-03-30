@@ -8,7 +8,6 @@ use Collective\Annotations\Console\RouteScanCommand;
 use Collective\Annotations\Database\Eloquent\Annotations\Scanner as ModelScanner;
 use Collective\Annotations\Events\Annotations\Scanner as EventScanner;
 use Collective\Annotations\Routing\Annotations\Scanner as RouteScanner;
-use Illuminate\Console\DetectsApplicationNamespace;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 
