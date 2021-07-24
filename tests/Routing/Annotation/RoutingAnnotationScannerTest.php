@@ -94,7 +94,7 @@ class RoutingAnnotationScannerTest extends TestCase
 
         $scanner->addAnnotationNamespace(
             'Collective\Annotations\Routing\Annotations\Annotations',
-            realpath(__DIR__.'/../../src/Routing/Annotations/Annotations')
+            realpath(__DIR__.'/../../../src/Routing/Annotations/Annotations')
         );
 
         return $scanner;
