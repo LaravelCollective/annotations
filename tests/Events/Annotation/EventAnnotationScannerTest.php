@@ -37,7 +37,7 @@ class EventAnnotationScannerTest extends TestCase
 
         $scanner->addAnnotationNamespace(
             'Collective\Annotations\Events\Annotations\Annotations',
-            realpath(__DIR__.'/../../src/Events/Annotations/Annotations')
+            realpath(__DIR__.'/../../../src/Events/Annotations/Annotations')
         );
 
         return $scanner;
