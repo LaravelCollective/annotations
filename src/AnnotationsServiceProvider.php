@@ -6,8 +6,11 @@ use Collective\Annotations\Console\EventScanCommand;
 use Collective\Annotations\Console\ModelScanCommand;
 use Collective\Annotations\Console\RouteScanCommand;
 use Collective\Annotations\Database\Eloquent\Annotations\Scanner as ModelScanner;
+use Collective\Annotations\Database\Eloquent\Attributes\Scanner as ModelAttributeScanner;
 use Collective\Annotations\Events\Annotations\Scanner as EventScanner;
+use Collective\Annotations\Events\Attributes\Scanner as EventAttributesScanner;
 use Collective\Annotations\Routing\Annotations\Scanner as RouteScanner;
+use Collective\Annotations\Routing\Attributes\Scanner as RouteAttributesScanner;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 
@@ -69,6 +72,13 @@ class AnnotationsServiceProvider extends ServiceProvider
      * @var bool
      */
     protected $scanEverything = false;
+
+    /**
+     * Determines whether to use attributes for scanning.
+     *
+     * @var bool
+     */
+    protected $useAttribute = false;
 
     /**
      * File finder for annotations.
@@ -180,6 +190,10 @@ class AnnotationsServiceProvider extends ServiceProvider
     protected function registerRouteScanner()
     {
         $this->app->singleton('annotations.route.scanner', function ($app) {
+            if ($this->useAttribute) {
+                return new RouteAttributesScanner([]);
+            }
+
             $scanner = new RouteScanner([]);
 
             $scanner->addAnnotationNamespace(
@@ -199,6 +213,10 @@ class AnnotationsServiceProvider extends ServiceProvider
     protected function registerEventScanner()
     {
         $this->app->singleton('annotations.event.scanner', function ($app) {
+            if ($this->useAttribute) {
+                return new EventAttributesScanner([]);
+            }
+
             $scanner = new EventScanner([]);
 
             $scanner->addAnnotationNamespace(
@@ -218,6 +236,10 @@ class AnnotationsServiceProvider extends ServiceProvider
     protected function registerModelScanner()
     {
         $this->app->singleton('annotations.model.scanner', function ($app) {
+            if ($this->useAttribute) {
+                return new ModelAttributeScanner([]);
+            }
+
             $scanner = new ModelScanner([]);
 
             $scanner->addAnnotationNamespace(
