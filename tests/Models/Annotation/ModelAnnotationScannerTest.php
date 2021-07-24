@@ -40,7 +40,7 @@ class ModelAnnotationScannerTest extends TestCase
 
         $scanner->addAnnotationNamespace(
             'Collective\Annotations\Database\Eloquent\Annotations\Annotations',
-            realpath(__DIR__.'/../../src/Database/Eloquent/Annotations/Annotations')
+            realpath(__DIR__.'/../../../src/Database/Eloquent/Annotations/Annotations')
         );
 
         return $scanner;
