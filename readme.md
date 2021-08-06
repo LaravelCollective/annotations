@@ -363,7 +363,6 @@ public function routeScans() {
     $classes = parent::routeScans();
 
     if ( $this->app->environment('local') ) {
-    {
         $classes = array_merge(
             $classes,
             $this->getClassesFromNamespace( App\Http\Controllers\Local::class )
