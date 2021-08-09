@@ -1,9 +1,12 @@
 <?php
 
-namespace App\Attributes;
+namespace App;
 
 use Collective\Annotations\Database\Eloquent\Attributes\Attributes\Bind;
 
+/**
+ * @Bind("systems")
+ */
 #[Bind('systems')]
 class NonEloquentModel
 {

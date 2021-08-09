@@ -1,1 +1,0 @@
-$router->model('users', 'App\Attributes\User');
