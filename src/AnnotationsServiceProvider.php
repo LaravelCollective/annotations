@@ -7,10 +7,13 @@ use Collective\Annotations\Console\ModelScanCommand;
 use Collective\Annotations\Console\RouteScanCommand;
 use Collective\Annotations\Database\Eloquent\Annotations\Scanner as ModelScanner;
 use Collective\Annotations\Database\Eloquent\Attributes\Scanner as ModelAttributeScanner;
+use Collective\Annotations\Database\ModelScannerInterface;
 use Collective\Annotations\Events\Annotations\Scanner as EventScanner;
 use Collective\Annotations\Events\Attributes\Scanner as EventAttributesScanner;
+use Collective\Annotations\Events\EventScannerInterface;
 use Collective\Annotations\Routing\Annotations\Scanner as RouteScanner;
 use Collective\Annotations\Routing\Attributes\Scanner as RouteAttributesScanner;
+use Collective\Annotations\Routing\RouteScannerInterface;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 
@@ -256,7 +259,7 @@ class AnnotationsServiceProvider extends ServiceProvider
      *
      * @param RouteScanner $scanner
      */
-    public function addEventAnnotations(EventScanner $scanner)
+    public function addEventAnnotations(EventScannerInterface $scanner)
     {
     }
 
@@ -265,7 +268,7 @@ class AnnotationsServiceProvider extends ServiceProvider
      *
      * @param RouteScanner $scanner
      */
-    public function addRoutingAnnotations(RouteScanner $scanner)
+    public function addRoutingAnnotations(RouteScannerInterface $scanner)
     {
     }
 
@@ -274,7 +277,7 @@ class AnnotationsServiceProvider extends ServiceProvider
      *
      * @param ModelScanner $scanner
      */
-    public function addModelAnnotations(ModelScanner $scanner)
+    public function addModelAnnotations(ModelScannerInterface $scanner)
     {
     }
 
