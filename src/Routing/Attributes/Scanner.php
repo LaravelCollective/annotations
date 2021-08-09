@@ -5,14 +5,13 @@ namespace Collective\Annotations\Routing\Attributes;
 use Collective\Annotations\Routing\Annotations\EndpointCollection;
 use Collective\Annotations\Routing\Annotations\MethodEndpoint;
 use Collective\Annotations\BaseScanner;
+use Collective\Annotations\Routing\RouteScannerInterface;
 use ReflectionClass;
 
-class Scanner extends BaseScanner
+class Scanner extends BaseScanner implements RouteScannerInterface
 {
     /**
-     * Convert the scanned annotations into route definitions.
-     *
-     * @return string
+     * @inheritDoc
      */
     public function getRouteDefinitions(): string
     {
@@ -26,9 +25,7 @@ class Scanner extends BaseScanner
     }
 
     /**
-     * Give information about the scanned annotations related to route definition.
-     *
-     * @return array
+     * @inheritDoc
      */
     public function getRouteDefinitionsDetail(): array
     {

@@ -3,17 +3,16 @@
 namespace Collective\Annotations\Events\Attributes;
 
 use Collective\Annotations\BaseScanner;
+use Collective\Annotations\Events\EventScannerInterface;
 use ReflectionAttribute;
 use ReflectionMethod;
 
-class Scanner extends BaseScanner
+class Scanner extends BaseScanner implements EventScannerInterface
 {
     /**
-     * Convert the scanned attributes into event definitions.
-     *
-     * @return string
+     * @inheritDoc
      */
-    public function getEventDefinitions()
+    public function getEventDefinitions(): string
     {
         $output = '';
 

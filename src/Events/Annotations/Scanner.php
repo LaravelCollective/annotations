@@ -3,10 +3,11 @@
 namespace Collective\Annotations\Events\Annotations;
 
 use Collective\Annotations\AnnotationScanner;
+use Collective\Annotations\Events\EventScannerInterface;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Symfony\Component\Finder\Finder;
 
-class Scanner extends AnnotationScanner
+class Scanner extends AnnotationScanner implements EventScannerInterface
 {
     /**
      * Create a new event scanner instance.
@@ -25,11 +26,9 @@ class Scanner extends AnnotationScanner
     }
 
     /**
-     * Convert the scanned annotations into event definitions.
-     *
-     * @return string
+     * @inheritDoc
      */
-    public function getEventDefinitions()
+    public function getEventDefinitions(): string
     {
         $output = '';
 

@@ -3,11 +3,12 @@
 namespace Collective\Annotations\Database\Eloquent\Annotations;
 
 use Collective\Annotations\AnnotationScanner;
+use Collective\Annotations\Database\ModelScannerInterface;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use ReflectionClass;
 use Symfony\Component\Finder\Finder;
 
-class Scanner extends AnnotationScanner
+class Scanner extends AnnotationScanner implements ModelScannerInterface
 {
     /**
      * Create a new event scanner instance.
@@ -26,13 +27,10 @@ class Scanner extends AnnotationScanner
     }
 
     /**
-     * Convert the scanned annotations into route definitions.
-     *
+     * @inheritDoc
      * @throws InvalidBindingResolverException
-     *
-     * @return string
      */
-    public function getModelDefinitions()
+    public function getModelDefinitions(): string
     {
         $output = '';
 

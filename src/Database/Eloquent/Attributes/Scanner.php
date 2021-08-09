@@ -3,19 +3,17 @@
 namespace Collective\Annotations\Database\Eloquent\Attributes;
 
 use Collective\Annotations\BaseScanner;
+use Collective\Annotations\Database\ModelScannerInterface;
 use Collective\Annotations\Database\Eloquent\Annotations\InvalidBindingResolverException;
 use ReflectionClass;
 
-class Scanner extends BaseScanner
+class Scanner extends BaseScanner implements ModelScannerInterface
 {
     /**
-     * Convert the scanned annotations into route definitions.
-     *
+     * @inheritDoc
      * @throws InvalidBindingResolverException
-     *
-     * @return string
      */
-    public function getModelDefinitions()
+    public function getModelDefinitions(): string
     {
         $output = '';
 

@@ -3,12 +3,13 @@
 namespace Collective\Annotations\Routing\Annotations;
 
 use Collective\Annotations\AnnotationScanner;
+use Collective\Annotations\Routing\RouteScannerInterface;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\SimpleAnnotationReader;
 use ReflectionClass;
 use Symfony\Component\Finder\Finder;
 
-class Scanner extends AnnotationScanner
+class Scanner extends AnnotationScanner implements RouteScannerInterface
 {
     /**
      * Create a new scanner instance.
@@ -26,12 +27,11 @@ class Scanner extends AnnotationScanner
         }
     }
 
+
     /**
-     * Convert the scanned annotations into route definitions.
-     *
-     * @return string
+     * @inheritDoc
      */
-    public function getRouteDefinitions()
+    public function getRouteDefinitions(): string
     {
         $output = '';
 
@@ -43,11 +43,9 @@ class Scanner extends AnnotationScanner
     }
 
     /**
-     * Give information about the scanned annotations related to route definition.
-     *
-     * @return array
+     * @inheritDoc
      */
-    public function getRouteDefinitionsDetail()
+    public function getRouteDefinitionsDetail(): array
     {
         $paths = array();
         foreach ($this->getEndpointsInClasses($this->getReader()) as $endpoint) {
