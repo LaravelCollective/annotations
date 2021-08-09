@@ -2,13 +2,11 @@
 
 namespace Collective\Annotations\Database\Eloquent\Attributes;
 
-use Collective\Annotations\AnnotationScanner;
+use Collective\Annotations\BaseScanner;
 use Collective\Annotations\Database\Eloquent\Annotations\InvalidBindingResolverException;
-use Collective\Annotations\Database\Eloquent\Attributes\Attributes\Bind;
-use ReflectionAttribute;
 use ReflectionClass;
 
-class Scanner extends AnnotationScanner
+class Scanner extends BaseScanner
 {
     /**
      * Convert the scanned annotations into route definitions.
