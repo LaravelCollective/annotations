@@ -7,15 +7,6 @@ use ReflectionClass;
 
 abstract class BaseScanner
 {
-    use NamespaceToPathConverterTrait;
-
-    /**
-     * Namespaces to check for annotation reader annotation classes.
-     *
-     * @var array
-     */
-    protected $namespaces = [];
-
     /**
      * The paths to scan for annotations.
      *
@@ -50,9 +41,9 @@ abstract class BaseScanner
     /**
      * Get all of the ReflectionClass instances in the scan array.
      *
-     * @return array
+     * @return ReflectionClass[]
      */
-    protected function getClassesToScan()
+    protected function getClassesToScan(): array
     {
         $classes = [];
 

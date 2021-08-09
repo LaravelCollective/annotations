@@ -8,6 +8,15 @@ use Symfony\Component\Finder\Finder;
 
 abstract class AnnotationScanner extends BaseScanner
 {
+    use NamespaceToPathConverterTrait;
+
+    /**
+     * Namespaces to check for annotation reader annotation classes.
+     *
+     * @var array
+     */
+    protected $namespaces = [];
+
     /**
      * Add an annotation namespace for the SimpleAnnotationReader instance.
      *
