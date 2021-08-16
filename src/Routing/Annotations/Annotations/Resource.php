@@ -2,16 +2,17 @@
 
 namespace Collective\Annotations\Routing\Annotations\Annotations;
 
-use Collective\Annotations\Routing\Annotations\EndpointCollection;
-use Collective\Annotations\Routing\Annotations\MethodEndpoint;
-use Collective\Annotations\Routing\Annotations\ResourceEndpoint;
+use Collective\Annotations\Routing\EndpointCollection;
+use Collective\Annotations\Routing\MethodEndpoint;
+use Collective\Annotations\Routing\ResourceEndpoint;
+use Collective\Annotations\Routing\Endpoint;
 use Illuminate\Support\Collection;
 use ReflectionClass;
 
 /**
  * @Annotation
  */
-class Resource extends Annotation
+class Resource extends Endpoint
 {
     /**
      * All of the resource controller methods.
