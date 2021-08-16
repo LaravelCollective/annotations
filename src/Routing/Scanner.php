@@ -2,12 +2,14 @@
 
 namespace Collective\Annotations\Routing;
 
-use Collective\Annotations\BaseScanner;
+use Collective\Annotations\ScannerTrait;
 use ReflectionClass;
 use ReflectionException;
 
-class Scanner extends BaseScanner implements RouteScannerInterface
+class Scanner
 {
+    use ScannerTrait;
+
     protected ScanStrategyInterface $strategy;
 
     /**
@@ -18,8 +20,8 @@ class Scanner extends BaseScanner implements RouteScannerInterface
      */
     public function __construct(ScanStrategyInterface $strategy, array $scan = [])
     {
-        parent::__construct($scan);
         $this->strategy = $strategy;
+        $this->scan = $scan;
     }
 
 
@@ -54,6 +56,14 @@ class Scanner extends BaseScanner implements RouteScannerInterface
         }
 
         return $paths;
+    }
+
+    /**
+     * @return ScanStrategyInterface
+     */
+    public function getStrategy(): ScanStrategyInterface
+    {
+        return $this->strategy;
     }
 
     /**
