@@ -1,7 +1,9 @@
 <?php
 
+use Collective\Annotations\Database\Eloquent\Annotations\AnnotationStrategy;
 use Collective\Annotations\Database\Eloquent\Annotations\Scanner;
 use Collective\Annotations\Database\Eloquent\Annotations\InvalidBindingResolverException;
+use Collective\Annotations\Database\Eloquent\Annotations\ScanStrategyInterface;
 use PHPUnit\Framework\TestCase;
 
 class ModelAnnotationScannerTest extends TestCase
@@ -34,15 +36,19 @@ class ModelAnnotationScannerTest extends TestCase
      *
      * @return
      */
-    protected function makeScanner($paths)
+    protected function makeScanner($paths): Scanner
     {
-        $scanner = Scanner::create($paths);
+        $strategy = self::annotationStrategy();
+        return new Scanner($strategy, $paths);
+    }
 
-        $scanner->addAnnotationNamespace(
+    protected static function annotationStrategy(): ScanStrategyInterface
+    {
+        $strategy = new AnnotationStrategy();
+        $strategy->addAnnotationNamespace(
             'Collective\Annotations\Database\Eloquent\Annotations\Annotations',
             realpath(__DIR__.'/../../src/Database/Eloquent/Annotations/Annotations')
         );
-
-        return $scanner;
+        return $strategy;
     }
 }

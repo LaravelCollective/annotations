@@ -2,55 +2,52 @@
 
 namespace Collective\Annotations\Database\Eloquent\Annotations;
 
-use Collective\Annotations\AnnotationScanner;
-use Doctrine\Common\Annotations\AnnotationRegistry;
+use Collective\Annotations\Scanner as BaseScanner;
 use ReflectionClass;
-use Symfony\Component\Finder\Finder;
 
-class Scanner extends AnnotationScanner
+class Scanner extends BaseScanner
 {
     /**
-     * Create a new event scanner instance.
-     *
-     * @param array $scan
-     *
-     * @return void
+     * @var ScanStrategyInterface
      */
-    public function __construct(array $scan)
-    {
-        parent::__construct($scan);
+    protected $strategy;
 
-        foreach (Finder::create()->files()->in(__DIR__.'/Annotations') as $file) {
-            AnnotationRegistry::registerFile($file->getRealPath());
-        }
+    public function __construct(ScanStrategyInterface $strategy, array $scan = [])
+    {
+        $this->strategy = $strategy;
+        $this->scan = $scan;
     }
 
     /**
-     * Convert the scanned annotations into route definitions.
-     *
      * @throws InvalidBindingResolverException
-     *
-     * @return string
      */
-    public function getModelDefinitions()
+    public function getModelDefinitions(): string
     {
         $output = '';
 
-        $reader = $this->getReader();
-
         foreach ($this->getClassesToScan() as $class) {
-            $annotations = $reader->getClassAnnotations($class);
+            if (!$this->strategy->support($class)) {
+                continue;
+            }
 
-            if (count($annotations) > 0 && !$this->extendsEloquent($class)) {
+            if (!$this->extendsEloquent($class)) {
                 throw new InvalidBindingResolverException('Class ['.$class->name.'] is not a subclass of [Illuminate\Database\Eloquent\Model].');
             }
 
-            foreach ($annotations as $annotation) {
-                $output .= $this->buildBinding($annotation->binding, $class->name);
+            foreach ($this->strategy->getBindings($class) as $binding) {
+                $output .= $this->buildBinding($binding, $class->name);
             }
         }
 
         return trim($output);
+    }
+
+    /**
+     * @return ScanStrategyInterface
+     */
+    public function getStrategy(): ScanStrategyInterface
+    {
+        return $this->strategy;
     }
 
     /**
@@ -60,7 +57,7 @@ class Scanner extends AnnotationScanner
      *
      * @return bool
      */
-    protected function extendsEloquent(ReflectionClass $class)
+    protected function extendsEloquent(ReflectionClass $class): bool
     {
         return $class->isSubclassOf('Illuminate\Database\Eloquent\Model');
     }
@@ -73,7 +70,7 @@ class Scanner extends AnnotationScanner
      *
      * @return string
      */
-    protected function buildBinding($binding, $class)
+    protected function buildBinding($binding, $class): string
     {
         return sprintf('$router->model(\'%s\', \'%s\');', $binding, $class).PHP_EOL;
     }
