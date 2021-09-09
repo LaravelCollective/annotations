@@ -1,8 +1,7 @@
 <?php
 
-namespace Collective\Annotations\Routing\Annotations;
+namespace Collective\Annotations\Routing;
 
-use Collective\Annotations\Routing\Annotations\Annotations\Annotation;
 use Collective\Annotations\Scanner as BaseScanner;
 use ReflectionClass;
 use ReflectionException;
@@ -113,7 +112,7 @@ class Scanner extends BaseScanner
      * @param EndpointCollection $endpoints
      * @param ReflectionClass $class
      * @param string $method
-     * @param Annotation[] $metaList
+     * @param Meta[] $metaList
      *
      * @return void
      * @throws ReflectionException

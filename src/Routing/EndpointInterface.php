@@ -1,6 +1,6 @@
 <?php
 
-namespace Collective\Annotations\Routing\Annotations;
+namespace Collective\Annotations\Routing;
 
 interface EndpointInterface
 {
@@ -9,33 +9,33 @@ interface EndpointInterface
      *
      * @return string
      */
-    public function toRouteDefinition();
+    public function toRouteDefinition(): string;
 
     /**
      * Get the detail about endpoint that helps to create route definition.
      *
      * @return array
      */
-    public function toRouteDefinitionDetail();
+    public function toRouteDefinitionDetail(): array;
 
     /**
      * Determine if the endpoint has any paths.
      *
      * @var bool
      */
-    public function hasPaths();
+    public function hasPaths(): bool;
 
     /**
-     * Get all of the path definitions for an endpoint.
+     * Get all the path definitions for an endpoint.
      *
      * @return array
      */
-    public function getPaths();
+    public function getPaths(): array;
 
     /**
      * Add the given path definition to the endpoint.
      *
-     * @param \Collective\Annotations\Routing\Annotations\AbstractPath $path
+     * @param AbstractPath $path
      *
      * @return void
      */
@@ -44,9 +44,9 @@ interface EndpointInterface
     /**
      * Get the controller method for the given endpoint path.
      *
-     * @param \Collective\Annotations\Routing\Annotations\AbstractPath $path
+     * @param AbstractPath $path
      *
      * @return string
      */
-    public function getMethodForPath(AbstractPath $path);
+    public function getMethodForPath(AbstractPath $path): string;
 }

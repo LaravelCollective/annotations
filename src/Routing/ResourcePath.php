@@ -1,6 +1,6 @@
 <?php
 
-namespace Collective\Annotations\Routing\Annotations;
+namespace Collective\Annotations\Routing;
 
 class ResourcePath extends AbstractPath
 {
@@ -18,7 +18,7 @@ class ResourcePath extends AbstractPath
      *
      * @return void
      */
-    public function __construct($method)
+    public function __construct(string $method)
     {
         $this->method = $method;
         $this->verb = $this->getVerb($method);
@@ -31,7 +31,7 @@ class ResourcePath extends AbstractPath
      *
      * @return string
      */
-    protected function getVerb($method)
+    protected function getVerb(string $method): string
     {
         switch ($method) {
             case 'index':

@@ -1,14 +1,12 @@
 <?php
 
-namespace Collective\Annotations\Routing\Annotations\Annotations;
+namespace Collective\Annotations\Routing;
 
 use ArrayAccess;
-use Collective\Annotations\Routing\Annotations\EndpointCollection;
-use Collective\Annotations\Routing\Annotations\MethodEndpoint;
 use ReflectionClass;
 use ReflectionMethod;
 
-abstract class Annotation implements ArrayAccess
+abstract class Meta implements ArrayAccess
 {
     /**
      * The value array.
@@ -32,8 +30,8 @@ abstract class Annotation implements ArrayAccess
     /**
      * Apply the annotation's settings to the given endpoint.
      *
-     * @param \Collective\Annotations\Routing\Annotations\MethodEndpoint $endpoint
-     * @param \ReflectionMethod                                          $method
+     * @param MethodEndpoint $endpoint
+     * @param ReflectionMethod $method
      *
      * @return void
      */
@@ -45,8 +43,8 @@ abstract class Annotation implements ArrayAccess
     /**
      * Apply the annotation's settings to the given endpoint collection.
      *
-     * @param \Collective\Annotations\Routing\Annotations\EndpointCollection $endpoints
-     * @param \ReflectionClass                                               $class
+     * @param EndpointCollection $endpoints
+     * @param ReflectionClass $class
      *
      * @return void
      */
@@ -62,7 +60,7 @@ abstract class Annotation implements ArrayAccess
      *
      * @return bool
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return array_key_exists($offset, $this->values);
     }
@@ -111,7 +109,7 @@ abstract class Annotation implements ArrayAccess
      *
      * @return mixed
      */
-    public function __get($key)
+    public function __get(string $key)
     {
         if ($this->offsetExists($key)) {
             return $this->values[$key];
@@ -126,7 +124,7 @@ abstract class Annotation implements ArrayAccess
      *
      * @return void
      */
-    public function __set($key, $value)
+    public function __set(string $key, $value)
     {
         $this->values[$key] = $value;
     }

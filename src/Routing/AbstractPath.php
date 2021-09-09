@@ -1,6 +1,6 @@
 <?php
 
-namespace Collective\Annotations\Routing\Annotations;
+namespace Collective\Annotations\Routing;
 
 abstract class AbstractPath
 {

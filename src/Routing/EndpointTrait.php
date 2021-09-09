@@ -1,6 +1,6 @@
 <?php
 
-namespace Collective\Annotations\Routing\Annotations;
+namespace Collective\Annotations\Routing;
 
 trait EndpointTrait
 {
@@ -12,7 +12,7 @@ trait EndpointTrait
      *
      * @return bool
      */
-    protected function middlewareAppliesToMethod($method, array $middleware)
+    protected function middlewareAppliesToMethod($method, array $middleware): bool
     {
         if (!empty($middleware['only']) && !in_array($method, $middleware['only'])) {
             return false;
@@ -26,11 +26,11 @@ trait EndpointTrait
     /**
      * Get the controller method for the given endpoint path.
      *
-     * @param \Collective\Annotations\Routing\Annotations\AbstractPath $path
+     * @param AbstractPath $path
      *
      * @return string
      */
-    public function getMethodForPath(AbstractPath $path)
+    public function getMethodForPath(AbstractPath $path): string
     {
         return $path->method;
     }
@@ -38,7 +38,7 @@ trait EndpointTrait
     /**
      * Add the given path definition to the endpoint.
      *
-     * @param \Collective\Annotations\Routing\Annotations\AbstractPath $path
+     * @param AbstractPath $path
      *
      * @return void
      */
@@ -54,7 +54,7 @@ trait EndpointTrait
      *
      * @return string
      */
-    protected function implodeArray(array $array)
+    protected function implodeArray(array $array): string
     {
         $results = [];
 

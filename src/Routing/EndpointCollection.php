@@ -1,17 +1,17 @@
 <?php
 
-namespace Collective\Annotations\Routing\Annotations;
+namespace Collective\Annotations\Routing;
 
 use Illuminate\Support\Collection;
 
 class EndpointCollection extends Collection
 {
     /**
-     * Get all of the paths for the given endpoint collection.
+     * Get all the paths for the given endpoint collection.
      *
      * @return array
      */
-    public function getAllPaths()
+    public function getAllPaths(): array
     {
         $paths = [];
 

@@ -1,8 +1,9 @@
 <?php
 
-namespace Collective\Annotations\Routing\Annotations;
+namespace Collective\Annotations\Routing;
 
 use Illuminate\Support\Collection;
+use ReflectionClass;
 
 class MethodEndpoint implements EndpointInterface
 {
@@ -11,7 +12,7 @@ class MethodEndpoint implements EndpointInterface
     /**
      * The ReflectionClass instance for the controller class.
      *
-     * @var \ReflectionClass
+     * @var ReflectionClass
      */
     public $reflection;
 
@@ -37,14 +38,14 @@ class MethodEndpoint implements EndpointInterface
     public $uses;
 
     /**
-     * All of the class level "inherited" middleware defined for the pathless endpoint.
+     * All the class level "inherited" middleware defined for the pathless endpoint.
      *
      * @var array
      */
     public $classMiddleware = [];
 
     /**
-     * All of the middleware defined for the pathless endpoint.
+     * All the middleware defined for the pathless endpoint.
      *
      * @var array
      */
@@ -65,11 +66,9 @@ class MethodEndpoint implements EndpointInterface
     }
 
     /**
-     * Transform the endpoint into a route definition.
-     *
-     * @return string
+     * @inheritDoc
      */
-    public function toRouteDefinition()
+    public function toRouteDefinition(): string
     {
         $routes = [];
 
@@ -80,15 +79,13 @@ class MethodEndpoint implements EndpointInterface
             );
         }
 
-        return implode(PHP_EOL.PHP_EOL, $routes);
+        return implode(PHP_EOL . PHP_EOL, $routes);
     }
 
     /**
-     * Get the detail about endpoint that helps to create route definition.
-     *
-     * @return array
+     * @inheritDoc
      */
-	public function toRouteDefinitionDetail()
+    public function toRouteDefinitionDetail(): array
     {
         $routes = [];
 
@@ -110,11 +107,11 @@ class MethodEndpoint implements EndpointInterface
     /**
      * Get the middleware for the path.
      *
-     * @param \Collective\Annotations\Routing\Annotations\AbstractPath $path
+     * @param AbstractPath $path
      *
-     * @return array
+     * @return string
      */
-    protected function getMiddleware(AbstractPath $path)
+    protected function getMiddleware(AbstractPath $path): string
     {
         $classMiddleware = $this->getClassMiddlewareForPath($path)->all();
 
@@ -126,36 +123,32 @@ class MethodEndpoint implements EndpointInterface
     /**
      * Get the class middleware for the given path.
      *
-     * @param \Collective\Annotations\Routing\Annotations\AbstractPath $path
+     * @param AbstractPath $path
      *
-     * @return array
+     * @return Collection
      */
-    protected function getClassMiddlewareForPath(AbstractPath $path)
+    protected function getClassMiddlewareForPath(AbstractPath $path): Collection
     {
         return Collection::make($this->classMiddleware)->filter(function ($m) {
             return $this->middlewareAppliesToMethod($this->method, $m);
         })
-        ->map(function ($m) {
-            return $m['name'];
-        });
+            ->map(function ($m) {
+                return $m['name'];
+            });
     }
 
     /**
-     * Determine if the endpoint has any paths.
-     *
-     * @return bool
+     * @inheritDoc
      */
-    public function hasPaths()
+    public function hasPaths(): bool
     {
         return count($this->paths) > 0;
     }
 
     /**
-     * Get all of the path definitions for an endpoint.
-     *
-     * @return array
+     * @inheritDoc
      */
-    public function getPaths()
+    public function getPaths(): array
     {
         return $this->paths;
     }
@@ -165,7 +158,7 @@ class MethodEndpoint implements EndpointInterface
      *
      * @return string
      */
-    protected function getTemplate()
+    protected function getTemplate(): string
     {
         return '$router->%s(\'%s\', [
 	\'uses\' => \'%s\',

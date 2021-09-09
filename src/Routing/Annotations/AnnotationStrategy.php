@@ -3,6 +3,7 @@
 namespace Collective\Annotations\Routing\Annotations;
 
 use Collective\Annotations\AnnotationStrategyTrait;
+use Collective\Annotations\Routing\ScanStrategyInterface;
 use ReflectionClass;
 
 class AnnotationStrategy implements ScanStrategyInterface

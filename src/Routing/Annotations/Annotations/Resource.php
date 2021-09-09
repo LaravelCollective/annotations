@@ -2,16 +2,17 @@
 
 namespace Collective\Annotations\Routing\Annotations\Annotations;
 
-use Collective\Annotations\Routing\Annotations\EndpointCollection;
-use Collective\Annotations\Routing\Annotations\MethodEndpoint;
-use Collective\Annotations\Routing\Annotations\ResourceEndpoint;
+use Collective\Annotations\Routing\EndpointCollection;
+use Collective\Annotations\Routing\MethodEndpoint;
+use Collective\Annotations\Routing\ResourceEndpoint;
+use Collective\Annotations\Routing\Meta;
 use Illuminate\Support\Collection;
 use ReflectionClass;
 
 /**
  * @Annotation
  */
-class Resource extends Annotation
+class Resource extends Meta
 {
     /**
      * All of the resource controller methods.
@@ -35,11 +36,11 @@ class Resource extends Annotation
     /**
      * Get all of the middleware defined on the resource method endpoints.
      *
-     * @param \Collective\Annotations\Routing\Annotations\EndpointCollection $endpoints
+     * @param EndpointCollection $endpoints
      *
      * @return array
      */
-    protected function getMiddleware(EndpointCollection $endpoints)
+    protected function getMiddleware(EndpointCollection $endpoints): array
     {
         return $this->extractFromEndpoints($endpoints, 'middleware');
     }
@@ -47,19 +48,19 @@ class Resource extends Annotation
     /**
      * Extract method items from endpoints for the given key.
      *
-     * @param \Collective\Annotations\Routing\Annotations\EndpointCollection $endpoints
-     * @param string                                                         $key
+     * @param EndpointCollection $endpoints
+     * @param string $key
      *
      * @return array
      */
-    protected function extractFromEndpoints(EndpointCollection $endpoints, $key)
+    protected function extractFromEndpoints(EndpointCollection $endpoints, string $key): array
     {
         $items = [
             'index' => [], 'create' => [], 'store' => [], 'show' => [],
             'edit'  => [], 'update' => [], 'destroy' => [],
         ];
 
-        foreach ($this->getEndpointsWithResourceMethods($endpoints, $key) as $endpoint) {
+        foreach ($this->getEndpointsWithResourceMethods($endpoints) as $endpoint) {
             $items[$endpoint->method] = array_merge($items[$endpoint->method], $endpoint->{$key});
         }
 
@@ -69,11 +70,11 @@ class Resource extends Annotation
     /**
      * Get all of the resource method endpoints with pathless filters.
      *
-     * @param \Collective\Annotations\Routing\Annotations\EndpointCollection $endpoints
+     * @param EndpointCollection $endpoints
      *
      * @return array
      */
-    protected function getEndpointsWithResourceMethods(EndpointCollection $endpoints)
+    protected function getEndpointsWithResourceMethods(EndpointCollection $endpoints): array
     {
         return Collection::make($endpoints)->filter(function ($endpoint) {
             return $endpoint instanceof MethodEndpoint &&

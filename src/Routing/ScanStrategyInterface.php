@@ -1,21 +1,20 @@
 <?php
 
-namespace Collective\Annotations\Routing\Annotations;
+namespace Collective\Annotations\Routing;
 
-use Collective\Annotations\Routing\Annotations\Annotations\Annotation;
 use ReflectionClass;
 
 interface ScanStrategyInterface
 {
     /**
      * @param ReflectionClass $class
-     * @return Annotation[]
+     * @return Meta[]
      */
     public function getClassMetaList(ReflectionClass $class): array;
 
     /**
      * @param ReflectionClass $class
-     * @return Annotation[][]
+     * @return Meta[][]
      */
     public function getMethodMetaLists(ReflectionClass $class): array;
 }

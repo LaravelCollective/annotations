@@ -1,16 +1,17 @@
 <?php
 
-namespace Collective\Annotations\Routing\Annotations;
+namespace Collective\Annotations\Routing;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use ReflectionClass;
 
 class ResourceEndpoint implements EndpointInterface
 {
     use EndpointTrait;
 
     /**
-     * All of the resource controller methods.
+     * All the resource controller methods.
      *
      * @var array
      */
@@ -19,7 +20,7 @@ class ResourceEndpoint implements EndpointInterface
     /**
      * The ReflectionClass instance for the controller class.
      *
-     * @var \ReflectionClass
+     * @var ReflectionClass
      */
     public $reflection;
 
@@ -28,7 +29,7 @@ class ResourceEndpoint implements EndpointInterface
      *
      * This corresponds to a path for each applicable resource method.
      *
-     * @var array[ResourcePath]
+     * @var ResourcePath[]
      */
     public $paths;
 
@@ -93,7 +94,7 @@ class ResourceEndpoint implements EndpointInterface
     }
 
     /**
-     * Build all of the paths for the resource endpoint.
+     * Build all the paths for the resource endpoint.
      *
      * @return void
      */
@@ -121,11 +122,9 @@ class ResourceEndpoint implements EndpointInterface
     }
 
     /**
-     * Transform the endpoint into a route definition.
-     *
-     * @return string
+     * @inheritDoc
      */
-    public function toRouteDefinition()
+    public function toRouteDefinition(): string
     {
         $routes = [];
 
@@ -144,11 +143,9 @@ class ResourceEndpoint implements EndpointInterface
     }
 
     /**
-     * Get the detail about endpoint that helps to create route definition.
-     *
-     * @return array
+     * @inheritDoc
      */
-    public function toRouteDefinitionDetail()
+    public function toRouteDefinitionDetail(): array
     {
         $routes = [];
 
@@ -170,7 +167,7 @@ class ResourceEndpoint implements EndpointInterface
     }
 
     /**
-     * Get all of the middleware for the given path.
+     * Get all the middleware for the given path.
      *
      * This will also merge in any of the middleware applied at the route level.
      *
@@ -178,7 +175,7 @@ class ResourceEndpoint implements EndpointInterface
      *
      * @return array
      */
-    protected function getMiddleware(ResourcePath $path)
+    protected function getMiddleware(ResourcePath $path): array
     {
         $classMiddleware = $this->getClassMiddlewareForPath($path)->all();
 
@@ -192,7 +189,7 @@ class ResourceEndpoint implements EndpointInterface
      *
      * @return Collection
      */
-    protected function getClassMiddlewareForPath(ResourcePath $path)
+    protected function getClassMiddlewareForPath(ResourcePath $path): Collection
     {
         return Collection::make($this->classMiddleware)->filter(function ($m) use ($path) {
             return $this->middlewareAppliesToMethod($path->method, $m);
@@ -209,27 +206,23 @@ class ResourceEndpoint implements EndpointInterface
      *
      * @return array
      */
-    protected function getNames(ResourcePath $path)
+    protected function getNames(ResourcePath $path): array
     {
         return isset($this->names[$path->method]) ? [$path->method => $this->names[$path->method]] : [];
     }
 
     /**
-     * Determine if the endpoint has any paths.
-     *
-     * @return bool
+     * @inheritDoc
      */
-    public function hasPaths()
+    public function hasPaths(): bool
     {
         return count($this->paths) > 0;
     }
 
     /**
-     * Get all of the path definitions for an endpoint.
-     *
-     * @return array[AbstractPath]
+     * @inheritDoc
      */
-    public function getPaths()
+    public function getPaths(): array
     {
         return $this->paths;
     }
@@ -239,7 +232,7 @@ class ResourceEndpoint implements EndpointInterface
      *
      * @return string
      */
-    protected function getTemplate()
+    protected function getTemplate(): string
     {
         return '// %s
 $router->group([\'middleware\' => [%s], \'prefix\' => %s, \'where\' => [%s], \'domain\' => %s], function() use ($router)
