@@ -27,6 +27,10 @@ class AnnotationsServiceProviderTest extends TestCase
 
     public function testConvertNamespaceToPath()
     {
+        $this->app->shouldReceive('getNamespace')->once()
+            ->andReturn('App\\');
+        Container::setInstance($this->app);
+
         $this->provider = new AnnotationsServiceProvider($this->app);
         $class = 'App\\Foo';
 
