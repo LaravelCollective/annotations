@@ -1,45 +1,58 @@
 <?php
 
 use Collective\Annotations\Database\Eloquent\Annotations\AnnotationStrategy;
-use Collective\Annotations\Database\Eloquent\Annotations\Scanner;
-use Collective\Annotations\Database\Eloquent\Annotations\InvalidBindingResolverException;
-use Collective\Annotations\Database\Eloquent\Annotations\ScanStrategyInterface;
+use Collective\Annotations\Database\Eloquent\Attributes\AttributeStrategy;
+use Collective\Annotations\Database\InvalidBindingResolverException;
+use Collective\Annotations\Database\Scanner;
+use Collective\Annotations\Database\ScanStrategyInterface;
 use PHPUnit\Framework\TestCase;
 
 class ModelScannerTest extends TestCase
 {
-    public function testProperModelDefinitionsAreGenerated()
+
+    /**
+     * @dataProvider strategyProvider
+     *
+     * @param ScanStrategyInterface $strategy
+     * @throws InvalidBindingResolverException
+     */
+    public function testProperModelDefinitionsAreGenerated(ScanStrategyInterface $strategy)
     {
         require_once __DIR__.'/fixtures/annotations/AnyModel.php';
-        $scanner = $this->makeScanner(['App\User']);
-
-        $definition = str_replace(PHP_EOL, "\n", $scanner->getModelDefinitions());
-        $this->assertEquals(trim(file_get_contents(__DIR__.'/results/annotation.php')), $definition);
-    }
-
-    public function testNonEloquentModelThrowsException()
-    {
-        $this->expectException(InvalidBindingResolverException::class);
-        $this->expectExceptionMessage('Class [App\NonEloquentModel] is not a subclass of [Illuminate\Database\Eloquent\Model]');
-
-        require_once __DIR__.'/fixtures/annotations/NonEloquentModel.php';
-        $scanner = $this->makeScanner(['App\NonEloquentModel']);
+        $scanner = new Scanner($strategy, ['App\User']);
 
         $definition = str_replace(PHP_EOL, "\n", $scanner->getModelDefinitions());
         $this->assertEquals(trim(file_get_contents(__DIR__.'/results/annotation.php')), $definition);
     }
 
     /**
-     * Construct a model annotation scanner.
+     * @dataProvider strategyProvider
      *
-     * @param array $paths
-     *
-     * @return
+     * @param ScanStrategyInterface $strategy
+     * @throws InvalidBindingResolverException
      */
-    protected function makeScanner($paths): Scanner
+    public function testNonEloquentModelThrowsException(ScanStrategyInterface $strategy)
     {
-        $strategy = self::annotationStrategy();
-        return new Scanner($strategy, $paths);
+        $this->expectException(InvalidBindingResolverException::class);
+        $this->expectExceptionMessage('Class [App\NonEloquentModel] is not a subclass of [Illuminate\Database\Eloquent\Model]');
+
+        require_once __DIR__.'/fixtures/annotations/NonEloquentModel.php';
+        $scanner = new Scanner($strategy, ['App\NonEloquentModel']);
+        $scanner->getModelDefinitions();
+    }
+
+
+    public function strategyProvider(): array
+    {
+        return [
+            'annotationStrategy' => [self::annotationStrategy()],
+            'attributeStrategy' => [self::attributeStrategy()],
+        ];
+    }
+
+    protected static function attributeStrategy(): ScanStrategyInterface
+    {
+        return new AttributeStrategy();
     }
 
     protected static function annotationStrategy(): ScanStrategyInterface
