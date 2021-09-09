@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Collective\Annotations\Events\Annotations;
+namespace Collective\Annotations\Events;
 
 use ReflectionMethod;
 

@@ -3,6 +3,7 @@
 namespace Collective\Annotations\Events\Annotations;
 
 use Collective\Annotations\AnnotationStrategyTrait;
+use Collective\Annotations\Events\ScanStrategyInterface;
 use ReflectionMethod;
 
 class AnnotationStrategy implements ScanStrategyInterface

@@ -1,6 +1,6 @@
 <?php
 
-namespace Collective\Annotations\Events\Annotations;
+namespace Collective\Annotations\Events;
 
 use Collective\Annotations\Scanner as BaseScanner;
 
