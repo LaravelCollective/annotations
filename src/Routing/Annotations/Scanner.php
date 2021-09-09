@@ -2,56 +2,56 @@
 
 namespace Collective\Annotations\Routing\Annotations;
 
-use Collective\Annotations\AnnotationScanner;
-use Doctrine\Common\Annotations\AnnotationRegistry;
-use Doctrine\Common\Annotations\SimpleAnnotationReader;
+use Collective\Annotations\Routing\Annotations\Annotations\Annotation;
+use Collective\Annotations\Scanner as BaseScanner;
 use ReflectionClass;
-use Symfony\Component\Finder\Finder;
+use ReflectionException;
 
-class Scanner extends AnnotationScanner
+class Scanner extends BaseScanner
 {
+    /**
+     * @var ScanStrategyInterface
+     */
+    protected $strategy;
+
     /**
      * Create a new scanner instance.
      *
      * @param array $scan
-     *
-     * @return void
+     * @param ScanStrategyInterface $strategy
      */
-    public function __construct(array $scan)
+    public function __construct(ScanStrategyInterface $strategy, array $scan = [])
     {
-        parent::__construct($scan);
-
-        foreach (Finder::create()->files()->in(__DIR__.'/Annotations') as $file) {
-            AnnotationRegistry::registerFile($file->getRealPath());
-        }
+        $this->strategy = $strategy;
+        $this->scan = $scan;
     }
 
+
     /**
-     * Convert the scanned annotations into route definitions.
+     * Convert the scanned annotations/attributes into route definitions.
      *
-     * @return string
+     * @throws ReflectionException
      */
-    public function getRouteDefinitions()
+    public function getRouteDefinitions(): string
     {
         $output = '';
 
-        foreach ($this->getEndpointsInClasses($this->getReader()) as $endpoint) {
-            $output .= $endpoint->toRouteDefinition().PHP_EOL.PHP_EOL;
+        foreach ($this->getEndpointsInClasses() as $endpoint) {
+            $output .= $endpoint->toRouteDefinition() . PHP_EOL . PHP_EOL;
         }
 
         return trim($output);
     }
 
     /**
-     * Give information about the scanned annotations related to route definition.
+     * Give information about the scanned annotations/attributes related to route definition.
      *
-     * @return array
+     * @throws ReflectionException
      */
-    public function getRouteDefinitionsDetail()
+    public function getRouteDefinitionsDetail(): array
     {
         $paths = array();
-        foreach ($this->getEndpointsInClasses($this->getReader()) as $endpoint) {
-            /* @var \Collective\Annotations\Routing\Annotations\MethodEndpoint $endpoint */
+        foreach ($this->getEndpointsInClasses() as $endpoint) {
             foreach ($endpoint->toRouteDefinitionDetail() as $path) {
                 $paths[] = $path;
             }
@@ -61,20 +61,25 @@ class Scanner extends AnnotationScanner
     }
 
     /**
+     * @return ScanStrategyInterface
+     */
+    public function getStrategy(): ScanStrategyInterface
+    {
+        return $this->strategy;
+    }
+
+    /**
      * Scan the directory and generate the route manifest.
      *
-     * @param \Doctrine\Common\Annotations\SimpleAnnotationReader $reader
-     *
-     * @return \Collective\Annotations\Routing\Annotations\EndpointCollection
+     * @return EndpointCollection
+     * @throws ReflectionException
      */
-    protected function getEndpointsInClasses(SimpleAnnotationReader $reader)
+    protected function getEndpointsInClasses(): EndpointCollection
     {
         $endpoints = new EndpointCollection();
 
         foreach ($this->getClassesToScan() as $class) {
-            $endpoints = $endpoints->merge($this->getEndpointsInClass(
-                $class, new AnnotationSet($class, $reader)
-            ));
+            $endpoints = $endpoints->merge($this->getEndpointsInClass($class));
         }
 
         return $endpoints;
@@ -83,21 +88,20 @@ class Scanner extends AnnotationScanner
     /**
      * Build the Endpoints for the given class.
      *
-     * @param \ReflectionClass                                          $class
-     * @param \Collective\Annotations\Routing\Annotations\AnnotationSet $annotations
-     *
-     * @return \Collective\Annotations\Routing\Annotations\EndpointCollection
+     * @param ReflectionClass $class
+     * @return EndpointCollection
+     * @throws ReflectionException
      */
-    protected function getEndpointsInClass(ReflectionClass $class, AnnotationSet $annotations)
+    protected function getEndpointsInClass(ReflectionClass $class): EndpointCollection
     {
         $endpoints = new EndpointCollection();
 
-        foreach ($annotations->method as $method => $methodAnnotations) {
-            $this->addEndpoint($endpoints, $class, $method, $methodAnnotations);
+        foreach ($this->strategy->getMethodMetaLists($class) as $method => $methodMetaList) {
+            $this->addEndpoint($endpoints, $class, $method, $methodMetaList);
         }
 
-        foreach ($annotations->class as $annotation) {
-            $annotation->modifyCollection($endpoints, $class);
+        foreach ($this->strategy->getClassMetaList($class) as $classMeta) {
+            $classMeta->modifyCollection($endpoints, $class);
         }
 
         return $endpoints;
@@ -106,22 +110,26 @@ class Scanner extends AnnotationScanner
     /**
      * Create a new endpoint in the collection.
      *
-     * @param \Collective\Annotations\Routing\Annotations\EndpointCollection $endpoints
-     * @param \ReflectionClass                                               $class
-     * @param string                                                         $method
-     * @param array                                                          $annotations
+     * @param EndpointCollection $endpoints
+     * @param ReflectionClass $class
+     * @param string $method
+     * @param Annotation[] $metaList
      *
      * @return void
+     * @throws ReflectionException
      */
-    protected function addEndpoint(EndpointCollection $endpoints, ReflectionClass $class,
-                                   $method, array $annotations)
-    {
+    protected function addEndpoint(
+        EndpointCollection $endpoints,
+        ReflectionClass    $class,
+        string             $method,
+        array              $metaList
+    ) {
         $endpoints->push($endpoint = new MethodEndpoint([
-            'reflection' => $class, 'method' => $method, 'uses' => $class->name.'@'.$method,
+            'reflection' => $class, 'method' => $method, 'uses' => $class->name . '@' . $method,
         ]));
 
-        foreach ($annotations as $annotation) {
-            $annotation->modify($endpoint, $class->getMethod($method));
+        foreach ($metaList as $meta) {
+            $meta->modify($endpoint, $class->getMethod($method));
         }
     }
 }

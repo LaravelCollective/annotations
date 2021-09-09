@@ -1,6 +1,8 @@
 <?php
 
+use Collective\Annotations\Routing\Annotations\AnnotationStrategy;
 use Collective\Annotations\Routing\Annotations\Scanner;
+use Collective\Annotations\Routing\Annotations\ScanStrategyInterface;
 use PHPUnit\Framework\TestCase;
 
 class RoutingAnnotationScannerTest extends TestCase
@@ -88,15 +90,19 @@ class RoutingAnnotationScannerTest extends TestCase
      *
      * @return
      */
-    protected function makeScanner($paths)
+    protected function makeScanner($paths): Scanner
     {
-        $scanner = Scanner::create($paths);
+        $strategy = self::annotationStrategy();
+        return new Scanner($strategy, $paths);
+    }
 
-        $scanner->addAnnotationNamespace(
+    protected static function annotationStrategy(): ScanStrategyInterface
+    {
+        $strategy = new AnnotationStrategy();
+        $strategy->addAnnotationNamespace(
             'Collective\Annotations\Routing\Annotations\Annotations',
-            realpath(__DIR__.'/../../src/Routing/Annotations/Annotations')
+            realpath(__DIR__ . '/../../src/Routing/Annotations/Annotations')
         );
-
-        return $scanner;
+        return $strategy;
     }
 }
