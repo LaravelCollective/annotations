@@ -6,7 +6,7 @@ use Collective\Annotations\Database\Eloquent\Annotations\InvalidBindingResolverE
 use Collective\Annotations\Database\Eloquent\Annotations\ScanStrategyInterface;
 use PHPUnit\Framework\TestCase;
 
-class ModelAnnotationScannerTest extends TestCase
+class ModelScannerTest extends TestCase
 {
     public function testProperModelDefinitionsAreGenerated()
     {
