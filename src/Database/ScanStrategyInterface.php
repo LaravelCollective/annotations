@@ -1,6 +1,6 @@
 <?php
 
-namespace Collective\Annotations\Database\Eloquent\Annotations;
+namespace Collective\Annotations\Database;
 
 use ReflectionClass;
 

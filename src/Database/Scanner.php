@@ -1,6 +1,6 @@
 <?php
 
-namespace Collective\Annotations\Database\Eloquent\Annotations;
+namespace Collective\Annotations\Database;
 
 use Collective\Annotations\Scanner as BaseScanner;
 use ReflectionClass;

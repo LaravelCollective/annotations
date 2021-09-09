@@ -4,6 +4,7 @@ namespace Collective\Annotations\Database\Eloquent\Annotations;
 
 use Collective\Annotations\AnnotationStrategyTrait;
 use Collective\Annotations\Database\Eloquent\Annotations\Annotations\Bind;
+use Collective\Annotations\Database\ScanStrategyInterface;
 use ReflectionClass;
 
 class AnnotationStrategy implements ScanStrategyInterface
