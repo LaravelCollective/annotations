@@ -1,99 +1,139 @@
 <?php
 
 use Collective\Annotations\Routing\Annotations\AnnotationStrategy;
-use Collective\Annotations\Routing\Annotations\Scanner;
-use Collective\Annotations\Routing\Annotations\ScanStrategyInterface;
+use Collective\Annotations\Routing\Scanner;
+use Collective\Annotations\Routing\Attributes\AttributeStrategy;
+use Collective\Annotations\Routing\ScanStrategyInterface;
 use PHPUnit\Framework\TestCase;
 
-class RoutingAnnotationScannerTest extends TestCase
+class RoutingScannerTest extends TestCase
 {
-	public function testProperRouteDefinitionsAreGenerated()
-	{
-		require_once __DIR__.'/fixtures/annotations/BasicController.php';
-		$scanner = $this->makeScanner(['App\Http\Controllers\BasicController']);
+    /**
+     * @dataProvider strategyProvider
+     *
+     * @param ScanStrategyInterface $strategy
+     */
+    public function testProperRouteDefinitionsAreGenerated(ScanStrategyInterface $strategy)
+    {
+        require_once __DIR__ . '/fixtures/annotations/BasicController.php';
+        $scanner = new Scanner($strategy, ['App\Http\Controllers\BasicController']);
 
-		$definition = str_replace(PHP_EOL, "\n", $scanner->getRouteDefinitions());
-		$this->assertEquals(trim(file_get_contents(__DIR__.'/results/annotation-basic.php')), $definition);
-	}
-
-	public function testProperRouteDefinitionsDetailAreGenerated()
-	{
-		require_once __DIR__.'/fixtures/annotations/BasicController.php';
-		$scanner = $this->makeScanner(['App\Http\Controllers\BasicController']);
-
-		$routeDetail = $scanner->getRouteDefinitionsDetail();
-		$this->assertEquals(include __DIR__ . '/results/route-detail-basic.php', $routeDetail);
-	}
-
-	public function testAnyAnnotation()
-	{
-		require_once __DIR__.'/fixtures/annotations/AnyController.php';
-		$scanner = $this->makeScanner(['App\Http\Controllers\AnyController']);
-
-		$definition = str_replace(PHP_EOL, "\n", $scanner->getRouteDefinitions());
-		$this->assertEquals(trim(file_get_contents(__DIR__.'/results/annotation-any.php')), $definition);
+        $definition = str_replace(PHP_EOL, "\n", $scanner->getRouteDefinitions());
+        $this->assertEquals(trim(file_get_contents(__DIR__ . '/results/annotation-basic.php')), $definition);
     }
 
-    public function testAnyAnnotationDetail()
+    /**
+     * @dataProvider strategyProvider
+     *
+     * @param ScanStrategyInterface $strategy
+     */
+    public function testProperRouteDefinitionsDetailAreGenerated(ScanStrategyInterface $strategy)
     {
-        require_once __DIR__.'/fixtures/annotations/AnyController.php';
-        $scanner = $this->makeScanner(['App\Http\Controllers\AnyController']);
+        require_once __DIR__ . '/fixtures/annotations/BasicController.php';
+        $scanner = new Scanner($strategy, ['App\Http\Controllers\BasicController']);
+
+        $routeDetail = $scanner->getRouteDefinitionsDetail();
+        $this->assertEquals(include __DIR__ . '/results/route-detail-basic.php', $routeDetail);
+    }
+
+    /**
+     * @dataProvider strategyProvider
+     *
+     * @param ScanStrategyInterface $strategy
+     */
+    public function testAnyAnnotation(ScanStrategyInterface $strategy)
+    {
+        require_once __DIR__ . '/fixtures/annotations/AnyController.php';
+        $scanner = new Scanner($strategy, ['App\Http\Controllers\AnyController']);
+
+        $definition = str_replace(PHP_EOL, "\n", $scanner->getRouteDefinitions());
+        $this->assertEquals(trim(file_get_contents(__DIR__ . '/results/annotation-any.php')), $definition);
+    }
+
+    /**
+     * @dataProvider strategyProvider
+     *
+     * @param ScanStrategyInterface $strategy
+     */
+    public function testAnyAnnotationDetail(ScanStrategyInterface $strategy)
+    {
+        require_once __DIR__ . '/fixtures/annotations/AnyController.php';
+        $scanner = new Scanner($strategy, ['App\Http\Controllers\AnyController']);
 
         $routeDetail = $scanner->getRouteDefinitionsDetail();
         $this->assertEquals(include __DIR__ . '/results/route-detail-any.php', $routeDetail);
     }
 
-    public function testWhereAnnotation()
+    /**
+     * @dataProvider strategyProvider
+     *
+     * @param ScanStrategyInterface $strategy
+     */
+    public function testWhereAnnotation(ScanStrategyInterface $strategy)
     {
-        require_once __DIR__.'/fixtures/annotations/WhereController.php';
-        $scanner = $this->makeScanner(['App\Http\Controllers\WhereController']);
+        require_once __DIR__ . '/fixtures/annotations/WhereController.php';
+        $scanner = new Scanner($strategy, ['App\Http\Controllers\WhereController']);
 
         $definition = $scanner->getRouteDefinitions();
-        $this->assertEquals(trim(file_get_contents(__DIR__.'/results/annotation-where.php')), $definition);
+        $this->assertEquals(trim(file_get_contents(__DIR__ . '/results/annotation-where.php')), $definition);
     }
 
-    public function testWhereAnnotationDetail()
+    /**
+     * @dataProvider strategyProvider
+     *
+     * @param ScanStrategyInterface $strategy
+     */
+    public function testWhereAnnotationDetail(ScanStrategyInterface $strategy)
     {
-        require_once __DIR__.'/fixtures/annotations/WhereController.php';
-        $scanner = $this->makeScanner(['App\Http\Controllers\WhereController']);
-
+        require_once __DIR__ . '/fixtures/annotations/WhereController.php';
+        $scanner = new Scanner($strategy, ['App\Http\Controllers\WhereController']);
         $routeDetail = $scanner->getRouteDefinitionsDetail();
         $this->assertEquals(include __DIR__ . '/results/route-detail-where.php', $routeDetail);
     }
 
-    public function testPrefixAnnotation()
+    /**
+     * @dataProvider strategyProvider
+     *
+     * @param ScanStrategyInterface $strategy
+     */
+    public function testPrefixAnnotation(ScanStrategyInterface $strategy)
     {
-        require_once __DIR__.'/fixtures/annotations/PrefixController.php';
-        $scanner = $this->makeScanner(['App\Http\Controllers\PrefixController']);
+        require_once __DIR__ . '/fixtures/annotations/PrefixController.php';
+        $scanner = new Scanner($strategy, ['App\Http\Controllers\PrefixController']);
 
         $definition = str_replace(PHP_EOL, "\n", $scanner->getRouteDefinitions());
-        $this->assertEquals(trim(file_get_contents(__DIR__.'/results/annotation-prefix.php')), $definition);
+        $this->assertEquals(trim(file_get_contents(__DIR__ . '/results/annotation-prefix.php')), $definition);
     }
 
-    public function testInheritedControllerAnnotations()
+    /**
+     * @dataProvider strategyProvider
+     *
+     * @param ScanStrategyInterface $strategy
+     */
+    public function testInheritedControllerAnnotations(ScanStrategyInterface $strategy)
     {
-        require_once __DIR__.'/fixtures/annotations/AnyController.php';
-        require_once __DIR__.'/fixtures/annotations/ChildController.php';
-        $scanner = $this->makeScanner([
+        require_once __DIR__ . '/fixtures/annotations/AnyController.php';
+        require_once __DIR__ . '/fixtures/annotations/ChildController.php';
+        $scanner = new Scanner($strategy, [
             'App\Http\Controllers\AnyController',
             'App\Http\Controllers\ChildController'
         ]);
 
         $definition = str_replace(PHP_EOL, "\n", $scanner->getRouteDefinitions());
-        $this->assertEquals(trim(file_get_contents(__DIR__.'/results/annotation-child.php')), $definition);
+        $this->assertEquals(trim(file_get_contents(__DIR__ . '/results/annotation-child.php')), $definition);
     }
 
-    /**
-     * Construct a route annotation scanner.
-     *
-     * @param array $paths
-     *
-     * @return
-     */
-    protected function makeScanner($paths): Scanner
+    public function strategyProvider(): array
     {
-        $strategy = self::annotationStrategy();
-        return new Scanner($strategy, $paths);
+        return [
+            'annotationStrategy' => [self::annotationStrategy()],
+            'attributeStrategy' => [self::attributeStrategy()],
+        ];
+    }
+
+    protected static function attributeStrategy(): ScanStrategyInterface
+    {
+        return new AttributeStrategy();
     }
 
     protected static function annotationStrategy(): ScanStrategyInterface
