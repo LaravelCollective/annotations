@@ -60,7 +60,7 @@ class AnnotationScannerTest extends TestCase
      */
     public function testSetClassesToScan()
     {
-        require_once __DIR__.'/Events/fixtures/annotations/BasicEventHandler.php';
+        require_once __DIR__.'/Events/fixtures/handlers/BasicEventHandler.php';
 
         $scanner = new TestAnnotationScanner([]);
         $scanner->setClassesToScan([
