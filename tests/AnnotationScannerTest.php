@@ -1,7 +1,7 @@
 <?php
 
 use Collective\Annotations\AnnotationScanner;
-use Collective\Annotations\Events\Annotations\Scanner;
+use Collective\Annotations\AnnotationStrategyTrait;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Illuminate\Container\Container;
 use Illuminate\Support\Facades\App;
@@ -42,14 +42,13 @@ class AnnotationScannerTest extends TestCase
             ->with('path')->once()
             ->andReturn('src');
 
-        $scanner = new Scanner(['App\Handlers\Events\BasicEventHandler']);
+        $strategy = new class() { use AnnotationStrategyTrait; };
 
         //underneath the scanner converts the App namespace to the src dir, based on what we set into the app above
-        $return = $scanner->addAnnotationNamespace(
+        $strategy->addAnnotationNamespace(
             'App\Events\Annotations\Annotations'
         );
 
-        $this->assertInstanceOf(Scanner::class, $return);
         $this->assertTrue(
             AnnotationRegistry::loadAnnotationClass('Collective\Annotations\Events\Annotations\Annotations\Hears')
         );

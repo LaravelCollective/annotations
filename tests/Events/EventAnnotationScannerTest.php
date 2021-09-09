@@ -1,6 +1,8 @@
 <?php
 
+use Collective\Annotations\Events\Annotations\AnnotationStrategy;
 use Collective\Annotations\Events\Annotations\Scanner;
+use Collective\Annotations\Events\Annotations\ScanStrategyInterface;
 use PHPUnit\Framework\TestCase;
 
 class EventAnnotationScannerTest extends TestCase
@@ -33,13 +35,18 @@ class EventAnnotationScannerTest extends TestCase
      */
     protected function makeScanner(array $paths): Scanner
     {
-        $scanner = Scanner::create($paths);
+        $strategy = self::annotationStrategy();
 
-        $scanner->addAnnotationNamespace(
+        return new Scanner($strategy, $paths);
+    }
+
+    protected static function annotationStrategy(): ScanStrategyInterface
+    {
+        $strategy = new AnnotationStrategy();
+        $strategy->addAnnotationNamespace(
             'Collective\Annotations\Events\Annotations\Annotations',
             realpath(__DIR__.'/../../src/Events/Annotations/Annotations')
         );
-
-        return $scanner;
+        return $strategy;
     }
 }

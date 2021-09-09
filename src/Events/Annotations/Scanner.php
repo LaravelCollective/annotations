@@ -2,48 +2,45 @@
 
 namespace Collective\Annotations\Events\Annotations;
 
-use Collective\Annotations\AnnotationScanner;
-use Doctrine\Common\Annotations\AnnotationRegistry;
-use Symfony\Component\Finder\Finder;
+use Collective\Annotations\Scanner as BaseScanner;
 
-class Scanner extends AnnotationScanner
+class Scanner extends BaseScanner
 {
     /**
-     * Create a new event scanner instance.
-     *
-     * @param array $scan
-     *
-     * @return void
+     * @var ScanStrategyInterface
      */
-    public function __construct(array $scan)
-    {
-        parent::__construct($scan);
+    protected $strategy;
 
-        foreach (Finder::create()->files()->in(__DIR__.'/Annotations') as $file) {
-            AnnotationRegistry::registerFile($file->getRealPath());
-        }
+    public function __construct(ScanStrategyInterface $strategy, array $scan = [])
+    {
+        $this->strategy = $strategy;
+        $this->scan = $scan;
     }
 
     /**
-     * Convert the scanned annotations into event definitions.
-     *
-     * @return string
+     * Convert the scanned annotations/attributes into event definitions.
      */
-    public function getEventDefinitions()
+    public function getEventDefinitions(): string
     {
         $output = '';
 
-        $reader = $this->getReader();
-
         foreach ($this->getClassesToScan() as $class) {
             foreach ($class->getMethods() as $method) {
-                foreach ($reader->getMethodAnnotations($method) as $annotation) {
-                    $output .= $this->buildListener($class->name, $method->name, $annotation->events);
+                foreach ($this->strategy->getEvents($method) as $events) {
+                    $output .= $this->buildListener($class->name, $method->name, $events);
                 }
             }
         }
 
         return trim($output);
+    }
+
+    /**
+     * @return ScanStrategyInterface
+     */
+    public function getStrategy(): ScanStrategyInterface
+    {
+        return $this->strategy;
     }
 
     /**
@@ -55,7 +52,7 @@ class Scanner extends AnnotationScanner
      *
      * @return string
      */
-    protected function buildListener($class, $method, $events)
+    protected function buildListener($class, $method, $events): string
     {
         return sprintf('$events->listen(%s, \''.$class.'@'.$method.'\');', var_export($events, true)).PHP_EOL;
     }
