@@ -84,6 +84,13 @@ class AnnotationsServiceProvider extends ServiceProvider {
      */
     protected $scanEverything = false;
 
+    /**
+     * Determines whether to use attributes for scanning.
+     *
+     * @var bool
+     */
+    protected $useAttribute = false;
+    
 }
 ```
 
@@ -170,6 +177,23 @@ class MailHandler {
 
 }
 ```
+or if you prefer to use attributes, set `$useAttribute` to `true` and do this.
+
+```php
+<?php namespace App\Handlers\Events;
+
+use App\User;use Collective\Annotations\Events\Attributes\Attributes\Hears;
+
+class MailHandler {
+
+  #[Hears('UserWasRegistered')]
+  public function sendWelcomeEmail(User $user)
+  {
+    // send welcome email to $user
+  }
+
+}
+```
 
 <a name="routes"></a>
 ## Route Annotations
@@ -203,6 +227,8 @@ You can also set up route names.
   /**
    * @Get("/", as="index")
    */
+
+   #[Get(path: '/', as: 'index')]
 ```
 
 ... or middlewares.
@@ -211,6 +237,8 @@ You can also set up route names.
   /**
    * @Get("/", middleware="guest")
    */
+
+   #[Get(path: '/', middleware: 'guest')]
 ```
 
 ... or both.
@@ -219,6 +247,8 @@ You can also set up route names.
   /**
    * @Get("/", as="index", middleware="guest")
    */
+
+   #[Get(path: '/', as: 'index', middleware: 'guest')]
 ```
 
 Here's an example that uses all of the available parameters for a `@Get` annotation:
@@ -227,6 +257,8 @@ Here's an example that uses all of the available parameters for a `@Get` annotat
   /**
    * @Get("/profiles/{id}", as="profiles.show", middleware="guest", domain="foo.com", where={"id": "[0-9]+"}, no_prefix="true")
    */
+
+   #[Get(path: '/profiles/{id}', as: 'profiles.show', middleware: 'guest', domain: 'foo.com', where: ['id' => '[0-9]+'], noPrefix: true)]
 ```
 `no_prefix` allows any prefix added to the routes in that controller be ignored for this particular route.
 
@@ -249,7 +281,16 @@ As well as defining middleware inline in the route definition tags (`@Get`, `@Po
   {
     return view('index');
   }
+
+  #[Get(path: 'login')]
+  #[Middleware(name: 'guest')]
+  public function login()
+  {
+    return view('index');
+  }
 ```
+
+
 
 Or on a whole controller, with the same only/exclude filter syntax that you can use elsewhere in laravel:
 
@@ -267,6 +308,20 @@ class AuthController extends Controller {
    *
    * @return Response
    */
+  public function logout()
+  {
+    $this->auth->logout();
+
+    return redirect( route('login') );
+  }
+
+}
+
+#[Middleware(name: 'guest', except: ['logout'], prefix: '/your/prefix')]
+class AuthController extends Controller {
+
+  #[Get(path: 'logout', as: 'logout')]
+  #[Middleware(name: 'auth')]
   public function logout()
   {
     $this->auth->logout();
@@ -297,6 +352,8 @@ You can specify the `only` and `except` arguments, just like you can with the re
   /**
    * @Resource('users', only={"index", "show"})
    */
+
+   #[Resource('users', only: ['index', 'show'])]
 ```
 
 You can also specify the route names of each resource method.
@@ -305,6 +362,8 @@ You can also specify the route names of each resource method.
   /**
    * @Resource('users', names={"index"="user.all", "show"="user.view"})
    */
+
+   #[Resource('users', names: ['index' => 'user.all', 'show' => 'user.view'])]
 ```
 
 ### @Controller
@@ -316,6 +375,11 @@ Using the `@Controller` annotation on a controller allows you to set various opt
 /**
  * @Controller(prefix="admin", domain="foo.com")
  */
+class AdminController extends Controller {
+  // All routes will be prefixed by admin/
+}
+
+#[Controller(prefix: 'admin', domain: 'foo.com')]
 class AdminController extends Controller {
   // All routes will be prefixed by admin/
 }
@@ -383,6 +447,11 @@ You can use annotations to automatically bind your models to route parameters, u
 /**
  * @Bind("users")
  */
+class User extends Eloquent {
+  //
+}
+
+#[Bind('users')]
 class User extends Eloquent {
   //
 }
