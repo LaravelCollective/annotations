@@ -38,10 +38,11 @@ class EventScannerTest extends TestCase
 
     public function strategyProvider(): array
     {
-        return [
-            'annotationStrategy' => [self::annotationStrategy()],
-            'attributeStrategy' => [self::attributeStrategy()],
-        ];
+        $strategies = ['annotationStrategy' => [self::annotationStrategy()]];
+        if (PHP_MAJOR_VERSION >= 8) {
+            $strategies['attributeStrategy'] = [self::attributeStrategy()];
+        }
+        return $strategies;
     }
 
     protected static function attributeStrategy(): ScanStrategyInterface

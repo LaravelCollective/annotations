@@ -126,7 +126,7 @@ class AnnotationsServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if (!$this->useAttribute) {
+        if (!$this->useAttribute()) {
             $this->addModelAnnotations($this->app->make(ModelScanAnnotationStrategy::class));
             $this->addEventAnnotations($this->app->make(EventsScanAnnotationStrategy::class));
             $this->addRoutingAnnotations($this->app->make(RouteScanAnnotationStrategy::class));
@@ -221,9 +221,9 @@ class AnnotationsServiceProvider extends ServiceProvider
 
     protected function determineStrategy()
     {
-        $this->app->bind(ModelScanStrategy::class, $this->useAttribute? ModelScanAttributeStrategy::class: ModelScanAnnotationStrategy::class);
-        $this->app->bind(EventsScanStrategy::class, $this->useAttribute? EventsScanAttributeStrategy::class: EventsScanAnnotationStrategy::class);
-        $this->app->bind(RouteScanStrategy::class, $this->useAttribute? RouteScanAttributeStrategy::class: RouteScanAnnotationStrategy::class);
+        $this->app->bind(ModelScanStrategy::class, $this->useAttribute()? ModelScanAttributeStrategy::class: ModelScanAnnotationStrategy::class);
+        $this->app->bind(EventsScanStrategy::class, $this->useAttribute()? EventsScanAttributeStrategy::class: EventsScanAnnotationStrategy::class);
+        $this->app->bind(RouteScanStrategy::class, $this->useAttribute()? RouteScanAttributeStrategy::class: RouteScanAnnotationStrategy::class);
     }
 
     /**
@@ -539,5 +539,10 @@ class AnnotationsServiceProvider extends ServiceProvider
     protected function getAllClasses()
     {
         return $this->getClassesFromNamespace($this->getAppNamespace());
+    }
+
+    protected function useAttribute(): bool
+    {
+        return $this->useAttribute && PHP_MAJOR_VERSION >= 8;
     }
 }

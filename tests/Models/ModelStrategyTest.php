@@ -7,6 +7,13 @@ use PHPUnit\Framework\TestCase;
 
 class ModelStrategyTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        if (PHP_MAJOR_VERSION < 8) {
+            $this->markTestSkipped('Skip because php version is less than 8.0.0');
+        }
+    }
+
     /**
      * @dataProvider modelProvider
      * @param string $fixturePath
