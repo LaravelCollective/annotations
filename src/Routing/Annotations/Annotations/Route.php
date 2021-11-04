@@ -2,11 +2,12 @@
 
 namespace Collective\Annotations\Routing\Annotations\Annotations;
 
-use Collective\Annotations\Routing\Annotations\MethodEndpoint;
-use Collective\Annotations\Routing\Annotations\Path;
+use Collective\Annotations\Routing\MethodEndpoint;
+use Collective\Annotations\Routing\Path;
+use Collective\Annotations\Routing\Meta;
 use ReflectionMethod;
 
-abstract class Route extends Annotation
+abstract class Route extends Meta
 {
     /**
      * {@inheritdoc}

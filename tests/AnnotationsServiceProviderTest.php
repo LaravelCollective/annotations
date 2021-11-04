@@ -27,7 +27,11 @@ class AnnotationsServiceProviderTest extends TestCase
 
     public function testConvertNamespaceToPath()
     {
-        $this->provider = new AnnotationsServiceProviderAppNamespaceStub($this->app);
+        $this->app->shouldReceive('getNamespace')->once()
+            ->andReturn('App\\');
+        Container::setInstance($this->app);
+
+        $this->provider = new AnnotationsServiceProvider($this->app);
         $class = 'App\\Foo';
 
         $result = $this->provider->convertNamespaceToPath($class);
@@ -41,7 +45,7 @@ class AnnotationsServiceProviderTest extends TestCase
             ->andReturn('Foo\\');
         Container::setInstance($this->app);
 
-        $this->provider = new AnnotationsServiceProviderAppNamespaceStub($this->app);
+        $this->provider = new AnnotationsServiceProvider($this->app);
         $class = 'App\\Foo';
 
         $result = $this->provider->convertNamespaceToPath($class);
@@ -53,7 +57,7 @@ class AnnotationsServiceProviderTest extends TestCase
     {
         $this->app->shouldReceive('getNamespace')->once()
             ->andReturn('App\\');
-        $this->provider = new AnnotationsServiceProviderAppNamespaceStub($this->app);
+        $this->provider = new AnnotationsServiceProvider($this->app);
         Container::setInstance($this->app);
 
         $this->app->shouldReceive('make')
@@ -67,15 +71,5 @@ class AnnotationsServiceProviderTest extends TestCase
         $results = $this->provider->getClassesFromNamespace('App\\Base', 'path/to/app');
 
         $this->assertEquals(['classes'], $results);
-    }
-}
-
-class AnnotationsServiceProviderAppNamespaceStub extends AnnotationsServiceProvider
-{
-    public $appNamespace = 'App';
-
-    public function getAppNamespace()
-    {
-        return $this->appNamespace;
     }
 }

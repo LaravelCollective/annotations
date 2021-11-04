@@ -2,15 +2,16 @@
 
 namespace Collective\Annotations\Routing\Annotations\Annotations;
 
-use Collective\Annotations\Routing\Annotations\EndpointCollection;
-use Collective\Annotations\Routing\Annotations\MethodEndpoint;
+use Collective\Annotations\Routing\EndpointCollection;
+use Collective\Annotations\Routing\MethodEndpoint;
+use Collective\Annotations\Routing\Meta;
 use ReflectionClass;
 use ReflectionMethod;
 
 /**
  * @Annotation
  */
-class Middleware extends Annotation
+class Middleware extends Meta
 {
     /**
      * {@inheritdoc}
