@@ -5,9 +5,18 @@ namespace Collective\Annotations;
 use Collective\Annotations\Console\EventScanCommand;
 use Collective\Annotations\Console\ModelScanCommand;
 use Collective\Annotations\Console\RouteScanCommand;
-use Collective\Annotations\Database\Eloquent\Annotations\Scanner as ModelScanner;
-use Collective\Annotations\Events\Annotations\Scanner as EventScanner;
-use Collective\Annotations\Routing\Annotations\Scanner as RouteScanner;
+use Collective\Annotations\Database\Eloquent\Annotations\AnnotationStrategy as ModelScanAnnotationStrategy;
+use Collective\Annotations\Database\Eloquent\Attributes\AttributeStrategy as ModelScanAttributeStrategy;
+use Collective\Annotations\Database\Scanner as ModelScanner;
+use Collective\Annotations\Database\ScanStrategyInterface as ModelScanStrategy;
+use Collective\Annotations\Events\Annotations\AnnotationStrategy as EventsScanAnnotationStrategy;
+use Collective\Annotations\Events\Attributes\AttributeStrategy as EventsScanAttributeStrategy;
+use Collective\Annotations\Events\Scanner as EventScanner;
+use Collective\Annotations\Events\ScanStrategyInterface as EventsScanStrategy;
+use Collective\Annotations\Routing\Annotations\AnnotationStrategy as RouteScanAnnotationStrategy;
+use Collective\Annotations\Routing\Attributes\AttributeStrategy as RouteScanAttributeStrategy;
+use Collective\Annotations\Routing\Scanner as RouteScanner;
+use Collective\Annotations\Routing\ScanStrategyInterface as RouteScanStrategy;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 
@@ -71,6 +80,13 @@ class AnnotationsServiceProvider extends ServiceProvider
     protected $scanEverything = false;
 
     /**
+     * Determines whether to use attributes for scanning.
+     *
+     * @var bool
+     */
+    protected $useAttribute = false;
+
+    /**
      * File finder for annotations.
      *
      * @var AnnotationFinder
@@ -93,6 +109,9 @@ class AnnotationsServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->registerAnnotationStrategies();
+        $this->determineStrategy();
+
         $this->registerRouteScanner();
         $this->registerEventScanner();
         $this->registerModelScanner();
@@ -107,19 +126,17 @@ class AnnotationsServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->addEventAnnotations($this->app->make('annotations.event.scanner'));
+        if (!$this->useAttribute()) {
+            $this->addModelAnnotations($this->app->make(ModelScanAnnotationStrategy::class));
+            $this->addEventAnnotations($this->app->make(EventsScanAnnotationStrategy::class));
+            $this->addRoutingAnnotations($this->app->make(RouteScanAnnotationStrategy::class));
+        }
 
+        $this->loadAnnotatedModels();
         $this->loadAnnotatedEvents();
-
-        $this->addRoutingAnnotations($this->app->make('annotations.route.scanner'));
-
         if (!$this->app->routesAreCached()) {
             $this->loadAnnotatedRoutes();
         }
-
-        $this->addModelAnnotations($this->app->make('annotations.model.scanner'));
-
-        $this->loadAnnotatedModels();
     }
 
     /**
@@ -172,6 +189,43 @@ class AnnotationsServiceProvider extends ServiceProvider
         });
     }
 
+    protected function registerAnnotationStrategies()
+    {
+        $this->app->singleton(ModelScanAnnotationStrategy::class, function ($app) {
+            $strategy = new ModelScanAnnotationStrategy();
+            $strategy->addAnnotationNamespace(
+                'Collective\Annotations\Database\Eloquent\Annotations\Annotations',
+                __DIR__ . '/Database/Eloquent/Annotations/Annotations'
+            );
+            return $strategy;
+        });
+
+        $this->app->singleton(EventsScanAnnotationStrategy::class, function ($app) {
+            $strategy = new EventsScanAnnotationStrategy();
+            $strategy->addAnnotationNamespace(
+                'Collective\Annotations\Events\Annotations\Annotations',
+                __DIR__ . '/Events/Annotations/Annotations'
+            );
+            return $strategy;
+        });
+
+        $this->app->singleton(RouteScanAnnotationStrategy::class, function ($app) {
+            $strategy = new RouteScanAnnotationStrategy();
+            $strategy->addAnnotationNamespace(
+                'Collective\Annotations\Routing\Annotations\Annotations',
+                __DIR__ . '/Routing/Annotations/Annotations'
+            );
+            return $strategy;
+        });
+    }
+
+    protected function determineStrategy()
+    {
+        $this->app->bind(ModelScanStrategy::class, $this->useAttribute()? ModelScanAttributeStrategy::class: ModelScanAnnotationStrategy::class);
+        $this->app->bind(EventsScanStrategy::class, $this->useAttribute()? EventsScanAttributeStrategy::class: EventsScanAnnotationStrategy::class);
+        $this->app->bind(RouteScanStrategy::class, $this->useAttribute()? RouteScanAttributeStrategy::class: RouteScanAnnotationStrategy::class);
+    }
+
     /**
      * Register the scanner.
      *
@@ -179,16 +233,7 @@ class AnnotationsServiceProvider extends ServiceProvider
      */
     protected function registerRouteScanner()
     {
-        $this->app->singleton('annotations.route.scanner', function ($app) {
-            $scanner = new RouteScanner([]);
-
-            $scanner->addAnnotationNamespace(
-              'Collective\Annotations\Routing\Annotations\Annotations',
-              __DIR__.'/Routing/Annotations/Annotations'
-            );
-
-            return $scanner;
-        });
+        $this->app->singleton('annotations.route.scanner', RouteScanner::class);
     }
 
     /**
@@ -198,16 +243,7 @@ class AnnotationsServiceProvider extends ServiceProvider
      */
     protected function registerEventScanner()
     {
-        $this->app->singleton('annotations.event.scanner', function ($app) {
-            $scanner = new EventScanner([]);
-
-            $scanner->addAnnotationNamespace(
-              'Collective\Annotations\Events\Annotations\Annotations',
-              __DIR__.'/Events/Annotations/Annotations'
-            );
-
-            return $scanner;
-        });
+        $this->app->singleton('annotations.event.scanner', EventScanner::class);
     }
 
     /**
@@ -217,42 +253,33 @@ class AnnotationsServiceProvider extends ServiceProvider
      */
     protected function registerModelScanner()
     {
-        $this->app->singleton('annotations.model.scanner', function ($app) {
-            $scanner = new ModelScanner([]);
-
-            $scanner->addAnnotationNamespace(
-              'Collective\Annotations\Database\Eloquent\Annotations\Annotations',
-              __DIR__.'/Database/Eloquent/Annotations/Annotations'
-            );
-
-            return $scanner;
-        });
+        $this->app->singleton('annotations.model.scanner', ModelScanner::class);
     }
 
     /**
      * Add annotation classes to the event scanner.
      *
-     * @param RouteScanner $scanner
+     * @param EventsScanAnnotationStrategy $strategy
      */
-    public function addEventAnnotations(EventScanner $scanner)
+    public function addEventAnnotations(EventsScanAnnotationStrategy $strategy)
     {
     }
 
     /**
      * Add annotation classes to the route scanner.
      *
-     * @param RouteScanner $scanner
+     * @param RouteScanAnnotationStrategy $strategy
      */
-    public function addRoutingAnnotations(RouteScanner $scanner)
+    public function addRoutingAnnotations(RouteScanAnnotationStrategy $strategy)
     {
     }
 
     /**
      * Add annotation classes to the model scanner.
      *
-     * @param ModelScanner $scanner
+     * @param ModelScanAnnotationStrategy $strategy
      */
-    public function addModelAnnotations(ModelScanner $scanner)
+    public function addModelAnnotations(ModelScanAnnotationStrategy $strategy)
     {
     }
 
@@ -512,5 +539,10 @@ class AnnotationsServiceProvider extends ServiceProvider
     protected function getAllClasses()
     {
         return $this->getClassesFromNamespace($this->getAppNamespace());
+    }
+
+    protected function useAttribute(): bool
+    {
+        return $this->useAttribute && PHP_MAJOR_VERSION >= 8;
     }
 }

@@ -2,13 +2,14 @@
 
 namespace Collective\Annotations\Routing\Annotations\Annotations;
 
-use Collective\Annotations\Routing\Annotations\EndpointCollection;
+use Collective\Annotations\Routing\EndpointCollection;
+use Collective\Annotations\Routing\Meta;
 use ReflectionClass;
 
 /**
  * @Annotation
  */
-class Controller extends Annotation
+class Controller extends Meta
 {
     /**
      * {@inheritdoc}
