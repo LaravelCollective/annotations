@@ -177,12 +177,13 @@ class MailHandler {
 
 }
 ```
-or if you prefer to use attributes, set `$useAttribute` to `true` and do this.
+or if you prefer to use attributes, set `$useAttribute` to `true` and do this. Note that unlike annotations, a use statement is required for the attribute.
 
 ```php
 <?php namespace App\Handlers\Events;
 
-use App\User;use Collective\Annotations\Events\Attributes\Attributes\Hears;
+use App\User;
+use Collective\Annotations\Events\Attributes\Attributes\Hears;
 
 class MailHandler {
 
@@ -289,8 +290,6 @@ As well as defining middleware inline in the route definition tags (`@Get`, `@Po
     return view('index');
   }
 ```
-
-
 
 Or on a whole controller, with the same only/exclude filter syntax that you can use elsewhere in laravel:
 
@@ -460,15 +459,19 @@ This is the equivalent of calling `Route::model('users', 'App\Users')`.
 
 <a name="custom-annotations"></a>
 ## Custom Annotations
+_Please Note: the namespaces have been updated in version 8.1 in order to allow PHP 8 attribute support._
 
-If you want to register your own annotations, create a namespace containing subclasses of `Collective\Annotations\Routing\Annotations\Annotations\Annotation` - let's say `App\Http\Annotations`.
+If you want to register your own annotations, create a namespace containing subclasses of `Collective\Annotations\Routing\Meta` - let's say `App\Http\Annotations`.\
+(_For version 8.0 and older, extend `Collective\Annotations\Routing\Annotations\Annotations\Annotation`_)
 
 Then, in your annotations service provider, override the `addRoutingAnnotations( RouteScanner $scanner )` method, and register your routing annotations namespace:
 
 ```php
 <?php namespace App\Providers;
 
-use Collective\Annotations\Routing\Annotations\Scanner as RouteScanner;
+use Collective\Annotations\Routing\Scanner as RouteScanner;
+# For version 8.0 and older use this instead of the above:
+# use Collective\Annotations\Routing\Annotations\Scanner as RouteScanner;
 
 /* ... then, in the class definition ... */
 
@@ -483,7 +486,7 @@ use Collective\Annotations\Routing\Annotations\Scanner as RouteScanner;
     }
 ```
 
-Your annotation classes must must have the `@Annotation` class annotation (see the following example).
+Your annotation classes must have the `@Annotation` class annotation (see the following example).
 
 There is an equivalent method for event annotations: `addEventAnnotations( EventScanner $scanner )`.
 
@@ -496,7 +499,9 @@ In a namespace - in this example, `App\Annotations`:
 ```php
 <?php namespace App\Http\Annotations;
 
-use Collective\Annotations\Routing\Annotations\Annotations\Annotation;
+use Collective\Annotations\Routing\Meta;
+# For version 8.0 and older use this instead of the above:
+# use Collective\Annotations\Routing\Annotations\Annotations\Annotation;
 use Collective\Annotations\Routing\Annotations\MethodEndpoint;
 use ReflectionMethod;
 
