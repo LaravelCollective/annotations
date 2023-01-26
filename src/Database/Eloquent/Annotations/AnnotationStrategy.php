@@ -24,12 +24,7 @@ class AnnotationStrategy implements ScanStrategyInterface
      */
     public function getBindings(ReflectionClass $class): array
     {
-        return array_map(
-            function (Bind $annotation) {
-                return $annotation->binding;
-            },
-            $this->getReader()->getClassAnnotations($class)
-        );
+        return $this->getReader()->getClassAnnotations($class);
     }
 
 }
