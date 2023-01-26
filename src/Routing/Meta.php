@@ -60,6 +60,7 @@ abstract class Meta implements ArrayAccess
      *
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset): bool
     {
         return array_key_exists($offset, $this->values);
@@ -72,6 +73,7 @@ abstract class Meta implements ArrayAccess
      *
      * @return mixed
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->values[$offset];
@@ -85,6 +87,7 @@ abstract class Meta implements ArrayAccess
      *
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         $this->values[$offset] = $value;
@@ -97,6 +100,7 @@ abstract class Meta implements ArrayAccess
      *
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         unset($this->values[$offset]);
