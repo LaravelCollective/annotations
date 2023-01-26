@@ -65,13 +65,17 @@ class Scanner extends BaseScanner
     /**
      * Build the event listener for the class and method.
      *
-     * @param string $binding
+     * @param BindInterface $binding
      * @param string $class
      *
      * @return string
      */
     protected function buildBinding($binding, $class): string
     {
-        return sprintf('$router->model(\'%s\', \'%s\');', $binding, $class).PHP_EOL;
+        $code = sprintf('$router->model(\'%s\', \'%s\');', $binding->getKey(), $class).PHP_EOL;
+        if ($binding->getPattern()) {
+            $code .= sprintf("\$router->pattern('%s', '%s');", $binding->getKey(), $binding->getPattern()).PHP_EOL;
+        }
+        return $code;
     }
 }

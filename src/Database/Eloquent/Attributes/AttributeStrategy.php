@@ -22,7 +22,7 @@ class AttributeStrategy implements ScanStrategyInterface
     public function getBindings(ReflectionClass $class): array
     {
         return array_map(
-            fn (ReflectionAttribute $attribute) => $attribute->newInstance()->binding,
+            fn (ReflectionAttribute $attribute) => $attribute->newInstance(),
             $class->getAttributes()
         );
     }

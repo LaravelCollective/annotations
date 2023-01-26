@@ -18,7 +18,7 @@ interface ScanStrategyInterface
      * Get information for Bindings of class
      *
      * @param ReflectionClass $class
-     * @return string[]
+     * @return BindInterface
      */
     public function getBindings(ReflectionClass $class): array;
 }
