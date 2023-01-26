@@ -57,6 +57,13 @@ class AnnotationsServiceProvider extends ServiceProvider
     protected $scanModels = [];
 
     /**
+     * The namespace to scan for models in.
+     *
+     * @var string
+     */
+    protected $scanModelsInNamespace = null;
+
+    /**
      * Determines if we will auto-scan in the local environment.
      *
      * @var bool
@@ -490,6 +497,10 @@ class AnnotationsServiceProvider extends ServiceProvider
     {
         if ($this->scanEverything) {
             return $this->getAllClasses();
+        }
+
+        if ($this->scanModelsInNamespace) {
+            return $this->getClassesFromNamespace($this->scanModelsInNamespace);
         }
 
         return $this->scanModels;

@@ -62,6 +62,13 @@ class AnnotationsServiceProvider extends ServiceProvider {
     protected $scanModels = [];
 
     /**
+     * The namespace to scan for models in.
+     *
+     * @var string
+     */
+    protected $scanModelsInNamespace = null;
+
+    /**
      * Determines if we will auto-scan in the local environment.
      *
      * @var bool
@@ -146,6 +153,17 @@ Add models to the `protected $scanModels` array to scan for model annotations.
     protected $scanModels = [
       'App\User',
     ];
+```
+
+Or scan your entire models namespace:
+
+```php
+    /**
+     * The namespace to scan for models in.
+     *
+     * @var string
+     */
+    protected $scanModelsInNamespace = 'App\Models';
 ```
 
 Alternatively, you can set `protected $scanEverything` to `true` to automatically scan all classes within your application's namespace. *Note:* This may increase the time required to execute the scanners, depending on the size of your application.
