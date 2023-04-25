@@ -39,5 +39,6 @@
             "dev-master": "6.0-dev"
         }
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "abandoned": "spatie/laravel-route-attributes"
 }
