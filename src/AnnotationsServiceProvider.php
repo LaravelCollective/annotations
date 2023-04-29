@@ -77,6 +77,13 @@ class AnnotationsServiceProvider extends ServiceProvider
      * @var AnnotationFinder
      */
     protected $finder;
+    
+    /**
+     * The name of the local environment
+     *
+     * @var string
+     */
+    protected $localEnvironmentName = 'local';
 
     /**
      * @param \Illuminate\Contracts\Foundation\Application $app
@@ -121,6 +128,16 @@ class AnnotationsServiceProvider extends ServiceProvider
         $this->addModelAnnotations($this->app->make('annotations.model.scanner'));
 
         $this->loadAnnotatedModels();
+    }
+    
+    /**
+     * Returns the name of the local environment
+     *
+     * @return string
+     */
+    protected function getLocalEnvironmentName()
+    {
+        return $this->localEnvironmentName;
     }
 
     /**
@@ -264,7 +281,7 @@ class AnnotationsServiceProvider extends ServiceProvider
      */
     public function loadAnnotatedEvents()
     {
-        if ($this->app->environment('local') && $this->scanWhenLocal) {
+        if ($this->app->environment($this->getLocalEnvironmentName()) && $this->scanWhenLocal) {
             $this->scanEvents();
         }
 
@@ -316,7 +333,7 @@ class AnnotationsServiceProvider extends ServiceProvider
      */
     protected function loadAnnotatedRoutes()
     {
-        if ($this->app->environment('local') && $this->scanWhenLocal) {
+        if ($this->app->environment($this->getLocalEnvironmentName()) && $this->scanWhenLocal) {
             $this->scanRoutes();
         }
 
@@ -370,7 +387,7 @@ class AnnotationsServiceProvider extends ServiceProvider
      */
     protected function loadAnnotatedModels()
     {
-        if ($this->app->environment('local') && $this->scanWhenLocal) {
+        if ($this->app->environment($this->getLocalEnvironmentName()) && $this->scanWhenLocal) {
             $this->scanModels();
         }
 
